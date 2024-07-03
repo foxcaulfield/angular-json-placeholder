@@ -23,9 +23,10 @@ import { MatButtonModule } from "@angular/material/button";
                 <p>{{ body() }}</p>
             </mat-card-content>
             <mat-card-footer>
-                <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
+                <mat-card-actions align="end">
+                    <button mat-button>More</button>
+                    <button mat-button>Update</button>
+                    <button mat-button>Delete</button>
                 </mat-card-actions>
             </mat-card-footer>
         </mat-card>
