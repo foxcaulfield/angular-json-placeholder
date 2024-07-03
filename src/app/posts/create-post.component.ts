@@ -81,22 +81,32 @@ export class CreatePostComponent {
     });
 
     public onSubmit(): void {
-        if (this.postForm.valid) {
-            const { title, body } = this.postForm.value;
-            console.log(title, body);
-            this.createPost();
-            // this.store.dispatch(createPost({ post: { title, body } }));
+        const {
+            valid: isValid,
+            value: { body, title },
+        } = this.postForm;
+
+        if (isValid && body && title) {
+            return this.store.dispatch(
+                postsActions.create({
+                    item: {
+                        body,
+                        title,
+                        userId: "1",
+                    },
+                })
+            );
         }
     }
-    public createPost(): void {
-        return this.store.dispatch(
-            postsActions.create({
-                item: {
-                    body: "qwertyasdfgzxcvbqwert",
-                    title: "asdfgzxcvb",
-                    userId: 1,
-                },
-            })
-        );
-    }
+    // public createPost(): void {
+    //     return this.store.dispatch(
+    //         postsActions.create({
+    //             item: {
+    //                 body: "qwertyasdfgzxcvbqwert",
+    //                 title: "asdfgzxcvb",
+    //                 userId: "1",
+    //             },
+    //         })
+    //     );
+    // }
 }
