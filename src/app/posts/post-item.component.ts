@@ -3,6 +3,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCardActions, MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatButtonModule } from "@angular/material/button";
+import { PostsModel } from "./posts.model";
 @Component({
     selector: "app-post-item",
     standalone: true,
@@ -34,8 +35,8 @@ import { MatButtonModule } from "@angular/material/button";
     styles: ``,
 })
 export class PostItemComponent {
-    public title: InputSignal<string> = input.required<string>();
-    public body: InputSignal<string> = input.required<string>();
-    public postId: InputSignal<number> = input.required<number>();
+    public title: InputSignal<PostsModel["title"]> = input.required<PostsModel["title"]>();
+    public body: InputSignal<PostsModel["body"]> = input.required<PostsModel["body"]>();
+    public postId: InputSignal<PostsModel["id"]> = input.required<PostsModel["id"]>();
     // public userId: InputSignal<string> = input.required<string>();
 }
