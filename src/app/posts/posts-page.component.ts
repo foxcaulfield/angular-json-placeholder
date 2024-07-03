@@ -37,15 +37,18 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
         ></app-post-item>
         } }
     `,
-    styles: `
-    :host {
-        max-width: 960px;
-        display: flex;
-//   justify-content: right;
-  flex-direction: column;
-//   align-content: center;
-  margin: auto;
-    }`,
+    styles: [
+        `
+            :host {
+                max-width: 960px;
+                display: flex;
+                //   justify-content: right;
+                flex-direction: column;
+                //   align-content: center;
+                margin: auto;
+            }
+        `,
+    ],
 })
 export class PostsPageComponent {
     private store: Store = inject(Store);
