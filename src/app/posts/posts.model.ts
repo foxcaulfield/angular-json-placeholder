@@ -4,3 +4,5 @@ export interface PostsModel {
     title: string;
     body: string;
 }
+
+export interface PostCreateDto extends Omit<PostsModel, "id"> {}

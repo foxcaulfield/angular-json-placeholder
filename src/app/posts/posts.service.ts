@@ -1,8 +1,8 @@
 import { Injectable, inject } from "@angular/core";
 import { environment } from "../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { PostsModel } from "./posts.model";
-import { Observable, catchError, throwError } from "rxjs";
+import { PostCreateDto, PostsModel } from "./posts.model";
+import { Observable, catchError, /* map, */ throwError } from "rxjs";
 
 @Injectable({
     providedIn: "root",
@@ -16,7 +16,14 @@ export class PostsService {
     public getAll(): Observable<PostsModel[]> {
         return this.http
             .get<PostsModel[]>(`${this.backendUrl}/posts`)
-            .pipe(catchError(this.handleError));
+            .pipe(
+                // map((resp) => {
+                //     return resp.map((item) => {
+                //         return { ...item, isDone: !item.isActive };
+                //     });
+                // }),
+                catchError(this.handleError)
+            );
     }
 
     public getOneById(id: PostsModel["id"]): Observable<PostsModel> {
@@ -25,8 +32,11 @@ export class PostsService {
             .pipe(catchError(this.handleError));
     }
 
-    
-    // public create(): Observable<PostsModel> {}
+    public create(createDto: PostCreateDto): Observable<PostsModel> {
+        return this.http
+            .post<PostsModel>(`${this.backendUrl}/posts`, createDto)
+            .pipe(catchError(this.handleError));
+    }
     // public update(): Observable<PostsModel> {}
     // public delete(): Observable<PostsModel> {}
     // public filter(): Observable<PostsModel[]> {}

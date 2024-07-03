@@ -3,7 +3,17 @@ import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostsService } from "./posts.service";
 import { postsActions } from "./posts.actions";
-import { catchError, delay, map, mergeMap, of } from "rxjs";
+import {
+    catchError,
+    delay,
+    map,
+    mergeMap,
+    of,
+} from "rxjs";
+
+interface ErrorWithMessage {
+    message?: string;
+}
 
 @Injectable()
 export class postsEffects {
@@ -17,10 +27,29 @@ export class postsEffects {
                 this.postsService.getAll().pipe(
                     delay(1000), // imitate loading
                     map((posts) => postsActions.loadSuccess({ items: posts })),
-                    catchError((error: { message?: string }) =>
+                    catchError(({ message }: ErrorWithMessage) =>
                         of(
                             postsActions.loadFailure({
-                                error: error?.message || "An error occured",
+                                error: message || "An error occured",
+                            })
+                        )
+                    )
+                )
+            )
+        );
+    });
+
+    public createPost$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(postsActions.create),
+            mergeMap((data) =>
+                this.postsService.create(data.item).pipe(
+                    delay(1000),
+                    map((item) => postsActions.createSuccess({ item })),
+                    catchError(({ message }: ErrorWithMessage) =>
+                        of(
+                            postsActions.createFailure({
+                                error: message || "An error occured",
                             })
                         )
                     )

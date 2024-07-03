@@ -1,7 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatDialog } from "@angular/material/dialog";
+import { CreatePostComponent } from "./create-post.component";
 
 @Component({
     selector: "app-posts-toolbar",
@@ -15,7 +17,7 @@ import { MatToolbarModule } from "@angular/material/toolbar";
             <span>Posts page</span>
             <span class="example-spacer"></span>
 
-            <button mat-raised-button>
+            <button mat-raised-button (click)="openDialog()">
                 <mat-icon>add</mat-icon>
                 add
             </button>
@@ -33,4 +35,13 @@ import { MatToolbarModule } from "@angular/material/toolbar";
         `,
     ],
 })
-export class PostsToolbarComponent {}
+export class PostsToolbarComponent {
+    public readonly dialog: MatDialog = inject(MatDialog);
+
+    public openDialog(): void {
+        const dialogRef = this.dialog.open(CreatePostComponent);
+        dialogRef.afterClosed().subscribe((result) => {
+            console.log(`Dialog result: ${result}`);
+        });
+    }
+}
