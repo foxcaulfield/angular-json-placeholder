@@ -9,25 +9,33 @@ import { AsyncPipe, NgIf } from "@angular/common";
 import { PostItemComponent } from "./post-item.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { ErrorPageComponent } from "../common/error-page.component";
+import { PostsToolbarComponent } from "./posts-toolbar.component";
 @Component({
     selector: "app-posts-page",
     standalone: true,
-    imports: [AsyncPipe, NgIf,PostItemComponent, MatProgressBarModule, ErrorPageComponent],
+    imports: [
+        AsyncPipe,
+        NgIf,
+        PostItemComponent,
+        MatProgressBarModule,
+        ErrorPageComponent,
+        PostsToolbarComponent,
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         @if (errorText$ | async; as errorText) {
-            <app-error-page [errorText]="errorText"/>
+        <app-error-page [errorText]="errorText" />
         } @else if (isLoading$ | async) {
-            <mat-progress-bar mode="query"></mat-progress-bar>
-        } @else { 
-            @for (post of (items$ | async); track post.id) {
-                <app-post-item 
-                [title]="post.title"
-                 [body]="post.body"
-                 [postId]="post.id"></app-post-item>
-            } 
-        }
-        
+        <mat-progress-bar mode="query"></mat-progress-bar>
+        } @else {
+        <app-posts-toolbar></app-posts-toolbar>
+        @for (post of (items$ | async); track post.id) {
+        <app-post-item
+            [title]="post.title"
+            [body]="post.body"
+            [postId]="post.id"
+        ></app-post-item>
+        } }
     `,
     styles: `
     :host {
