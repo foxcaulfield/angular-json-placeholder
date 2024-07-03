@@ -83,19 +83,18 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
         </mat-toolbar>
     `,
     styles: `
-  .mat-accent {
-    background: rgba(255, 255, 255, 0.2)
-  }
-  .example-spacer {
-  flex: 1 1 auto;
-}
-.toolbar {
+        .mat-accent {
+            background: rgba(255, 255, 255, 0.2)
+        }
+        .example-spacer {
+        flex: 1 1 auto;
+        }
+        .toolbar {
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
         }
-
   `,
 })
 export class NavbarComponent {}

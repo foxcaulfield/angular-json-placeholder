@@ -3,7 +3,7 @@ import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostsService } from "./posts.service";
 import { postsActions } from "./posts.actions";
-import { catchError, map, mergeMap, of } from "rxjs";
+import { catchError, delay, map, mergeMap, of } from "rxjs";
 
 @Injectable()
 export class postsEffects {
@@ -15,6 +15,7 @@ export class postsEffects {
             ofType(postsActions.load),
             mergeMap(() =>
                 this.postsService.getAll().pipe(
+                    delay(1000), // imitate loading
                     map((posts) => postsActions.loadSuccess({ items: posts })),
                     catchError((error: { message?: string }) =>
                         of(

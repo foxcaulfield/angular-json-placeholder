@@ -4,18 +4,28 @@ import { postsActions } from "./posts.actions";
 import { postsFeature } from "./posts.reducer";
 import { Observable } from "rxjs";
 import { PostsModel } from "./posts.model";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgIf } from "@angular/common";
 
 import { PostItemComponent } from "./post-item.component";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { ErrorPageComponent } from "../common/error-page.component";
 @Component({
     selector: "app-posts-page",
     standalone: true,
-    imports: [AsyncPipe, PostItemComponent],
+    imports: [AsyncPipe, NgIf,PostItemComponent, MatProgressBarModule, ErrorPageComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    template: ` @for (post of (items$ | async); track post.id) {
-        <app-post-item [title]="post.title" [body]="post.body"></app-post-item>
-
-        }`,
+    template: `
+        @if (errorText$ | async; as errorText) {
+            <app-error-page [errorText]="errorText"/>
+        } @else if (isLoading$ | async) {
+            <mat-progress-bar mode="query"></mat-progress-bar>
+        } @else { 
+            @for (post of (items$ | async); track post.id) {
+                <app-post-item [title]="post.title" [body]="post.body"></app-post-item>
+            } 
+        }
+        
+    `,
     styles: `
     :host {
         max-width: 960px;
