@@ -5,33 +5,26 @@ import { postsFeature } from "./posts.reducer";
 import { Observable } from "rxjs";
 import { PostsModel } from "./posts.model";
 import { AsyncPipe } from "@angular/common";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { MatCardModule } from "@angular/material/card";
-import { MatChipsModule } from "@angular/material/chips";
+
+import { PostItemComponent } from "./post-item.component";
 @Component({
     selector: "app-posts-page",
     standalone: true,
-    imports: [AsyncPipe, MatCardModule, MatChipsModule, MatProgressBarModule],
+    imports: [AsyncPipe, PostItemComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: ` @for (post of (items$ | async); track post.id) {
-        <mat-card class="card" appearance="outlined">
-            <mat-card-header>
-                <mat-card-title>{{post.title}}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <p>{{ post.body }}</p>
-            </mat-card-content>
-            <mat-card-footer >
-                <mat-chip-set >
-                    <mat-chip>botton1</mat-chip>
-                    <mat-chip>botton2</mat-chip>
-                    <mat-chip>botton3</mat-chip>
-                </mat-chip-set>
-            </mat-card-footer>
-        </mat-card>
+        <app-post-item [title]="post.title" [body]="post.body"></app-post-item>
 
         }`,
-    styles: ``,
+    styles: `
+    :host {
+        max-width: 960px;
+        display: flex;
+//   justify-content: right;
+  flex-direction: column;
+//   align-content: center;
+  margin: auto;
+    }`,
 })
 export class PostsPageComponent {
     private store: Store = inject(Store);

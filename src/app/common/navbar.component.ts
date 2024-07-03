@@ -15,7 +15,7 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
         RouterLinkActive,
     ],
     template: `
-        <mat-toolbar>
+        <mat-toolbar class="toolbar">
             <button
                 mat-button
                 class="button"
@@ -89,6 +89,13 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   .example-spacer {
   flex: 1 1 auto;
 }
+.toolbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
   `,
 })
 export class NavbarComponent {}

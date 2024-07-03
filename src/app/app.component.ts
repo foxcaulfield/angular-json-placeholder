@@ -6,8 +6,15 @@ import { NavbarComponent } from "./common/navbar.component";
     selector: "app-root",
     standalone: true,
     imports: [RouterOutlet, NavbarComponent, RouterLink],
-    templateUrl: "./app.component.html",
-    styleUrl: "./app.component.scss",
+    template: ` <app-navbar />
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>`,
+    styles: `
+    .content {
+  padding-top: 64px; /* Adjust this value to the height of your toolbar */
+}
+    `,
 })
 export class AppComponent {
     public title: string = "angular-json-placeholder";
