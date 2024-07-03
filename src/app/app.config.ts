@@ -7,14 +7,16 @@ import { provideStore } from "@ngrx/store";
 import { provideEffects } from "@ngrx/effects";
 import { postsFeature } from "./posts/posts.reducer";
 import { postsEffects } from "./posts/posts.effects";
+import { provideHttpClient } from "@angular/common/http";
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        provideHttpClient(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
         provideAnimationsAsync(),
         provideStore({
-          postsFeature: postsFeature.reducer
+            postsFeature: postsFeature.reducer,
         }),
         provideEffects(postsEffects),
     ],

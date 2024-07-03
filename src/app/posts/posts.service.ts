@@ -15,7 +15,7 @@ export class PostsService {
 
     public getAll(): Observable<PostsModel[]> {
         return this.http
-            .get<PostsModel[]>(this.backendUrl)
+            .get<PostsModel[]>(`${this.backendUrl}/posts`)
             .pipe(catchError(this.handleError));
     }
 
