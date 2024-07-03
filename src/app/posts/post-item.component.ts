@@ -1,25 +1,32 @@
 import { Component, InputSignal, input } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { MatCardModule } from "@angular/material/card";
+import { MatCardActions, MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
+import { MatButtonModule } from "@angular/material/button";
 @Component({
     selector: "app-post-item",
     standalone: true,
-    imports: [MatCardModule, MatChipsModule, MatProgressBarModule],
+    imports: [
+        MatCardModule,
+        MatChipsModule,
+        MatProgressBarModule,
+        MatCardActions,
+        MatButtonModule
+    ],
     template: `
         <mat-card class="card" appearance="outlined">
             <mat-card-header>
                 <mat-card-title>{{ title() }}</mat-card-title>
+                <mat-card-subtitle>postId: {{ postId() }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
                 <p>{{ body() }}</p>
             </mat-card-content>
             <mat-card-footer>
-                <mat-chip-set>
-                    <mat-chip>botton1</mat-chip>
-                    <mat-chip>botton2</mat-chip>
-                    <mat-chip>botton3</mat-chip>
-                </mat-chip-set>
+                <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                </mat-card-actions>
             </mat-card-footer>
         </mat-card>
     `,
@@ -28,4 +35,6 @@ import { MatChipsModule } from "@angular/material/chips";
 export class PostItemComponent {
     public title: InputSignal<string> = input.required<string>();
     public body: InputSignal<string> = input.required<string>();
+    public postId: InputSignal<number> = input.required<number>();
+    // public userId: InputSignal<string> = input.required<string>();
 }

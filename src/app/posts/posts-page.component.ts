@@ -21,7 +21,10 @@ import { ErrorPageComponent } from "../common/error-page.component";
             <mat-progress-bar mode="query"></mat-progress-bar>
         } @else { 
             @for (post of (items$ | async); track post.id) {
-                <app-post-item [title]="post.title" [body]="post.body"></app-post-item>
+                <app-post-item 
+                [title]="post.title"
+                 [body]="post.body"
+                 [postId]="post.id"></app-post-item>
             } 
         }
         
