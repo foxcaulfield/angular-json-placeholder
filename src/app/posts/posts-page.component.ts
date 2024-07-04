@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { postsActions } from "./posts.actions";
 import { postsFeature } from "./posts.reducer";
-import { Observable } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
 import { PostsModel } from "./posts.model";
 import { AsyncPipe, NgIf } from "@angular/common";
 
@@ -55,11 +55,25 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
         `,
     ],
 })
-export class PostsPageComponent {
+export class PostsPageComponent implements OnInit, OnDestroy {
     private store: Store = inject(Store);
+    private destroy$: Subject<void> = new Subject<void>();
 
-    public constructor() {
-        this.store.dispatch(postsActions.load());
+    public constructor() {}
+
+    public ngOnInit(): void {
+        this.selectIsInitialized$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result) => {
+                if (!result) {
+                    this.store.dispatch(postsActions.load());
+                }
+            });
+    }
+
+    public ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     public errorText$: Observable<string | null> = this.store.select(
@@ -72,5 +86,9 @@ export class PostsPageComponent {
 
     public items$: Observable<PostsModel[]> = this.store.select(
         postsFeature.selectItems
+    );
+
+    public selectIsInitialized$: Observable<boolean> = this.store.select(
+        postsFeature.selectIsInitialized
     );
 }

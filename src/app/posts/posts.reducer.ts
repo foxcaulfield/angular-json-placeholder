@@ -7,12 +7,14 @@ export interface IPostsFeatureState {
     items: PostsModel[];
     isLoading: boolean;
     error: string | null;
+    isInitialized: boolean;
 }
 
 export const initialState: IPostsFeatureState = {
     items: [],
     isLoading: false,
     error: null,
+    isInitialized: false
 };
 
 export const postsFeature = createFeature({
@@ -23,6 +25,7 @@ export const postsFeature = createFeature({
             state.isLoading = true;
         }),
         immerOn(postsActions.loadSuccess, (state, action) => {
+            state.isInitialized = true;
             state.isLoading = false;
             state.error = null;
             state.items = action.items;
@@ -46,5 +49,5 @@ export const postsFeature = createFeature({
     ),
 });
 
-export const { name, reducer, selectItems, selectIsLoading, selectError } =
+export const { name, reducer, selectItems, selectIsLoading, selectError, selectIsInitialized } =
     postsFeature;
