@@ -14,7 +14,7 @@ import {
 interface ErrorWithMessage {
     message?: string;
 }
-
+const DELAY = 5;
 @Injectable()
 export class postsEffects {
     private actions$: Actions = inject(Actions);
@@ -25,7 +25,7 @@ export class postsEffects {
             ofType(postsActions.load),
             mergeMap(() =>
                 this.postsService.getAll().pipe(
-                    delay(1000), // imitate loading
+                    delay(DELAY), // imitate loading
                     map((posts) => postsActions.loadSuccess({ items: posts })),
                     catchError(({ message }: ErrorWithMessage) =>
                         of(
@@ -44,7 +44,7 @@ export class postsEffects {
             ofType(postsActions.create),
             mergeMap((data) =>
                 this.postsService.create(data.item).pipe(
-                    delay(1000),
+                    delay(DELAY),
                     map((item) => postsActions.createSuccess({ item })),
                     catchError(({ message }: ErrorWithMessage) =>
                         of(
