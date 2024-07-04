@@ -89,4 +89,25 @@ export class postsEffects {
             )
         );
     });
+
+    public getComments$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(postsActions.getComments),
+            mergeMap((data) =>
+                this.postsService.getPostsComments(data.id).pipe(
+                    delay(DELAY),
+                    map(({ id, comments }) =>
+                        postsActions.getCommentsSuccess({ id, comments })
+                    ),
+                    catchError(({ message }: ErrorWithMessage) =>
+                        of(
+                            postsActions.getCommentsFailure({
+                                error: message || "An error occured",
+                            })
+                        )
+                    )
+                )
+            )
+        );
+    });
 }

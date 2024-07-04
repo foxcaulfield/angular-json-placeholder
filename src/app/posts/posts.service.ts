@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {
+    CommentModel,
     ExternalPostModel,
     PostCreateDto,
     PostsModel,
@@ -10,8 +11,14 @@ import { Observable, catchError, delay, map, of, throwError } from "rxjs";
 import { RandomDateService } from "../utils/random-date.service";
 import { UniqueRandomIntService } from "../utils/unique-random-int.service";
 
-type DummyJsonResponse = {
+type DummyJsonPostsResponse = {
     posts: ExternalPostModel[];
+    total: number;
+    skip: number;
+    limit: number;
+};
+type DummyJsonCommentsResponse = {
+    comments: CommentModel[];
     total: number;
     skip: number;
     limit: number;
@@ -33,7 +40,7 @@ export class PostsService {
 
     public getAll(): Observable<PostsModel[]> {
         return this.http
-            .get<DummyJsonResponse>(`${this.backendUrl}/posts`)
+            .get<DummyJsonPostsResponse>(`${this.backendUrl}/posts`)
             .pipe(
                 map((result) => result.posts),
                 catchError(this.handleError)
@@ -68,13 +75,25 @@ export class PostsService {
     public update(
         id: PostsModel["id"],
         updateDto: PostUpdateDto
-    ): Observable<{item: PostUpdateDto, id: PostsModel["id"] }> {
+    ): Observable<{ item: PostUpdateDto; id: PostsModel["id"] }> {
         return of({ id, item: updateDto }).pipe(delay(300));
         // return this.http
         //     .put<ExternalPostModel>(`${this.backendUrl}/posts/${id}`, updateDto)
         // .pipe(catchError(this.handleError));
     }
 
+    public getPostsComments(
+        id: PostsModel["id"]
+    ): Observable<{ id: PostsModel["id"]; comments: CommentModel[] }> {
+        return this.http
+            .get<DummyJsonCommentsResponse>(
+                `${this.backendUrl}/posts/${id}/comments`
+            )
+            .pipe(
+                map((result) => ({ id, comments: result.comments })),
+                catchError(this.handleError)
+            );
+    }
     // public filter(): Observable<PostsModel[]> {}
     // public patch(): Observable<PostsModel> {}
 

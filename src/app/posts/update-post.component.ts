@@ -140,7 +140,7 @@ export class UpdatePostComponent implements OnInit, OnDestroy {
                     item: {
                         body,
                         title,
-                        tags: ["common"],
+                        // tags: ["common"],
                         userId: 1,
                     },
                 })

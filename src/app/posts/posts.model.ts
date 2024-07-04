@@ -30,10 +30,24 @@ export interface PostsModel {
     };
     views: number;
     userId: number;
+    comments?: CommentModel[]
 }
 
-export interface PostCreateDto extends Omit<PostsModel, "id" | "reactions" | "views"> {}
+export interface PostCreateDto
+    extends Omit<PostsModel, "id" | "reactions" | "views"> {}
 export interface PostUpdateDto extends Partial<PostCreateDto> {}
+
+export interface CommentModel {
+    id: number;
+    body: string;
+    postId: number;
+    likes: number;
+    user: {
+        id: number;
+        username: string;
+        fullName: string;
+    };
+}
 
 // export class PostCreateDto
 //     implements Omit<PostsModel, "id" | "reactions" | "views">

@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from "@ngrx/store";
-import { PostsModel, PostCreateDto, PostUpdateDto } from "./posts.model";
+import { PostsModel, PostCreateDto, PostUpdateDto, CommentModel } from "./posts.model";
 
 export const postsFeatureName = "postsFeature";
 
@@ -21,6 +21,10 @@ export const postsActions = createActionGroup({
         update: props<{ id: PostsModel["id"]; item: PostUpdateDto }>(),
         updateSuccess: props<{ id: PostsModel["id"]; item: PostUpdateDto }>(),
         updateFailure: props<{ error: string }>(),
+
+        getComments: props<{ id: PostsModel["id"] }>(),
+        getCommentsSuccess: props<{ id: PostsModel["id"], comments: CommentModel[] }>(),
+        getCommentsFailure: props<{ error: string }>(),
 
         registerCommonFailure: props<{ error: string }>(),
     },

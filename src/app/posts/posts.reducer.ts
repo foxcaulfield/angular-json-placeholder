@@ -80,6 +80,26 @@ export const postsFeature = createFeature({
         immerOn(postsActions.updateFailure, (state, action) => {
             state.isLoading = false;
             state.error = action.error;
+        }),
+
+        immerOn(postsActions.getComments, (state) => {
+            state.isLoading = true;
+        }),
+        immerOn(postsActions.getCommentsSuccess, (state, action) => {
+            state.isLoading = false;
+            state.error = null;
+            // state.items.unshift(action.item);
+            const index = state.items.findIndex((obj) => obj.id === action.id);
+            if (index !== -1) {
+                state.items[index] = {
+                    ...state.items[index],
+                    comments: action.comments,
+                };
+            }
+        }),
+        immerOn(postsActions.getCommentsFailure, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error;
         })
     ),
     extraSelectors(baseSelectors) {
@@ -106,7 +126,13 @@ export const postsFeature = createFeature({
             createSelector(baseSelectors.selectItems, (items) =>
                 items.find((item) => item.id === itemId)
             );
-        return { selectById };
+
+        const selectCommentsById = (itemId: PostsModel["id"]) =>
+            createSelector(
+                baseSelectors.selectItems,
+                (items) => items.find((item) => item.id === itemId)?.comments
+            );
+        return { selectById, selectCommentsById };
     },
 });
 
