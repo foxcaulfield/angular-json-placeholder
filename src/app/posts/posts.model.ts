@@ -32,4 +32,4 @@ export interface PostsModel {
     userId: number;
 }
 
-export interface PostCreateDto extends Omit<PostsModel, "id"> {}
+export interface PostCreateDto extends Omit<PostsModel, "id" | "reactions" | "views"> {}
