@@ -36,7 +36,7 @@ import { CreatePostComponent } from "./create-post.component";
     ],
 })
 export class PostsToolbarComponent {
-    public readonly dialog: MatDialog = inject(MatDialog);
+    private readonly dialog: MatDialog = inject(MatDialog);
 
     public openCreateDialog(): void {
         const dialogRef = this.dialog.open(CreatePostComponent);

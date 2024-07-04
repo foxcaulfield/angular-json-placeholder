@@ -1,4 +1,4 @@
-import { createFeature, createReducer } from "@ngrx/store";
+import { createFeature, createReducer, createSelector } from "@ngrx/store";
 import { postsActions, postsFeatureName } from "./posts.actions";
 import { PostsModel } from "./posts.model";
 import { immerOn } from "ngrx-immer/store";
@@ -72,11 +72,9 @@ export const postsFeature = createFeature({
             state.isLoading = false;
             state.error = null;
             // state.items.unshift(action.item);
-            const index = state.items.findIndex(
-                (obj) => obj.id === action.id
-            );
+            const index = state.items.findIndex((obj) => obj.id === action.id);
             if (index !== -1) {
-                state.items[index] = {...state.items[index], ...action.item};
+                state.items[index] = { ...state.items[index], ...action.item };
             }
         }),
         immerOn(postsActions.updateFailure, (state, action) => {
@@ -84,6 +82,32 @@ export const postsFeature = createFeature({
             state.error = action.error;
         })
     ),
+    extraSelectors(baseSelectors) {
+        // const selectIsDoneItems = createSelector(
+        //   baseSelectors.selectItems,
+        //   (items) => items.filter((item) => item.isDone)
+        // );
+
+        /**
+         * Actual type is quite complex
+         *
+         * @example
+         * type TMSelector = (itemId: PostsModel["id"]) =>
+         *                  MemoizedSelector<
+         *                      Record<string, unknown>,
+         *                      PostsModel | undefined,
+         *                      (s1: PostsModel[]) => PostsModel | undefined>;
+         *
+         * @param itemId
+         * @returns
+         */
+        /* eslint-disable @typescript-eslint/explicit-function-return-type*/
+        const selectById = (itemId: PostsModel["id"]) =>
+            createSelector(baseSelectors.selectItems, (items) =>
+                items.find((item) => item.id === itemId)
+            );
+        return { selectById };
+    },
 });
 
 export const {

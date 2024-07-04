@@ -10,6 +10,7 @@ import { Store } from "@ngrx/store";
 import { postsActions } from "./posts.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { UpdatePostComponent } from "./update-post.component";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-post-item",
@@ -69,7 +70,9 @@ import { UpdatePostComponent } from "./update-post.component";
                         </div>
                     </div>
                     <section>
-                        <button mat-button>More</button>
+                        <button mat-button (click)="openPostPage(postId())">
+                            More
+                        </button>
                         <button mat-button (click)="openUpdateDialog()">
                             Update
                         </button>
@@ -144,7 +147,8 @@ import { UpdatePostComponent } from "./update-post.component";
 })
 export class PostItemComponent {
     private store: Store = inject(Store);
-    public readonly dialog: MatDialog = inject(MatDialog);
+    private router: Router = inject(Router);
+    private readonly dialog: MatDialog = inject(MatDialog);
 
     public title: InputSignal<PostsModel["title"]> =
         input.required<PostsModel["title"]>();
@@ -182,5 +186,9 @@ export class PostItemComponent {
         dialogRef.afterClosed().subscribe((result) => {
             console.log(`Dialog result: ${result}`);
         });
+    }
+
+    public openPostPage(id: PostsModel["id"]): void {
+        this.router.navigate(["posts", id]);
     }
 }
