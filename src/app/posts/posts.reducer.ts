@@ -14,7 +14,7 @@ export const initialState: IPostsFeatureState = {
     items: [],
     isLoading: false,
     error: null,
-    isInitialized: false
+    isInitialized: false,
 };
 
 export const postsFeature = createFeature({
@@ -34,6 +34,7 @@ export const postsFeature = createFeature({
             state.isLoading = false;
             state.error = action.error;
         }),
+
         immerOn(postsActions.create, (state) => {
             state.isLoading = true;
         }),
@@ -45,9 +46,32 @@ export const postsFeature = createFeature({
         immerOn(postsActions.createFailure, (state, action) => {
             state.isLoading = false;
             state.error = action.error;
+        }),
+
+        immerOn(postsActions.delete, (state) => {
+            state.isLoading = true;
+        }),
+        immerOn(postsActions.deleteSuccess, (state, action) => {
+            state.isLoading = false;
+            state.error = null;
+            // state.items.unshift(action.item);
+            const index = state.items.findIndex((obj) => obj.id === action.id);
+            if (index !== -1) {
+                state.items.splice(index, 1);
+            }
+        }),
+        immerOn(postsActions.deleteFailure, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error;
         })
     ),
 });
 
-export const { name, reducer, selectItems, selectIsLoading, selectError, selectIsInitialized } =
-    postsFeature;
+export const {
+    name,
+    reducer,
+    selectItems,
+    selectIsLoading,
+    selectError,
+    selectIsInitialized,
+} = postsFeature;

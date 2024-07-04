@@ -3,13 +3,7 @@ import { Injectable, inject } from "@angular/core";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { PostsService } from "./posts.service";
 import { postsActions } from "./posts.actions";
-import {
-    catchError,
-    delay,
-    map,
-    mergeMap,
-    of,
-} from "rxjs";
+import { catchError, delay, map, mergeMap, of } from "rxjs";
 
 interface ErrorWithMessage {
     message?: string;
@@ -49,6 +43,25 @@ export class postsEffects {
                     catchError(({ message }: ErrorWithMessage) =>
                         of(
                             postsActions.createFailure({
+                                error: message || "An error occured",
+                            })
+                        )
+                    )
+                )
+            )
+        );
+    });
+
+    public deletePost$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(postsActions.delete),
+            mergeMap((data) =>
+                this.postsService.delete(data.id).pipe(
+                    delay(DELAY),
+                    map(({ id }) => postsActions.deleteSuccess({ id })),
+                    catchError(({ message }: ErrorWithMessage) =>
+                        of(
+                            postsActions.deleteFailure({
                                 error: message || "An error occured",
                             })
                         )

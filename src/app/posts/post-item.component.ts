@@ -1,4 +1,4 @@
-import { Component, InputSignal, input } from "@angular/core";
+import { Component, InputSignal, inject, input } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
@@ -6,6 +6,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { PostsModel } from "./posts.model";
 import { NgFor } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
+import { Store } from "@ngrx/store";
+import { postsActions } from "./posts.actions";
 
 @Component({
     selector: "app-post-item",
@@ -67,7 +69,7 @@ import { MatIconModule } from "@angular/material/icon";
                     <section>
                         <button mat-button>More</button>
                         <button mat-button>Update</button>
-                        <button mat-button>Delete</button>
+                        <button mat-button (click)="delete(postId())">Delete</button>
                     </section>
                 </mat-card-actions>
             </mat-card-footer>
@@ -135,6 +137,8 @@ import { MatIconModule } from "@angular/material/icon";
     ],
 })
 export class PostItemComponent {
+    private store: Store = inject(Store);
+
     public title: InputSignal<PostsModel["title"]> =
         input.required<PostsModel["title"]>();
     public body: InputSignal<PostsModel["body"]> =
@@ -151,4 +155,8 @@ export class PostItemComponent {
         input.required<PostsModel["views"]>();
     public userId: InputSignal<PostsModel["userId"]> =
         input.required<PostsModel["userId"]>();
+
+    public delete(id: PostsModel["id"]):void {
+        this.store.dispatch(postsActions.delete({id}))
+    }
 }

@@ -14,6 +14,10 @@ export const postsActions = createActionGroup({
         createSuccess: props<{ item: PostsModel }>(),
         createFailure: props<{ error: string }>(),
 
+        delete: props<{ id: PostsModel["id"] }>(),
+        deleteSuccess: props<{ id: PostsModel["id"]  }>(),
+        deleteFailure: props<{ error: string }>(),
+
         registerCommonFailure: props<{ error: string}>()
     },
 });

@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ExternalPostModel, PostCreateDto, PostsModel } from "./posts.model";
-import { Observable, catchError, map, throwError } from "rxjs";
+import { Observable, catchError, delay, map, of, throwError } from "rxjs";
 import { RandomDateService } from "../utils/random-date.service";
 import { UniqueRandomIntService } from "../utils/unique-random-int.service";
 
@@ -35,17 +35,6 @@ export class PostsService {
             );
     }
 
-    // public getOneById(id: PostsModel["id"]): Observable<PostsModel> {
-    //     return this.http
-    //         .get<ExternalPostModel>(`${this.backendUrl}/${id}`)
-    //         .pipe(
-    //             map((result) => {
-    //                 return this.transformToInternal(result);
-    //             }),
-    //             catchError(this.handleError)
-    //         );
-    // }
-
     public create(createDto: PostCreateDto): Observable<PostsModel> {
         return this.http
             .post<PostCreateDto & { id: number }>(
@@ -67,10 +56,25 @@ export class PostsService {
                 catchError(this.handleError)
             );
     }
+
+    public delete(id: PostsModel["id"]): Observable<{ id: PostsModel["id"] }> {
+        return of({ id }).pipe(delay(300));
+    }
     // public update(): Observable<PostsModel> {}
     // public delete(): Observable<PostsModel> {}
     // public filter(): Observable<PostsModel[]> {}
     // public patch(): Observable<PostsModel> {}
+
+    // public getOneById(id: PostsModel["id"]): Observable<PostsModel> {
+    //     return this.http
+    //         .get<ExternalPostModel>(`${this.backendUrl}/${id}`)
+    //         .pipe(
+    //             map((result) => {
+    //                 return this.transformToInternal(result);
+    //             }),
+    //             catchError(this.handleError)
+    //         );
+    // }
 
     // Error handling
     private handleError(error: { message?: unknown }): Observable<never> {
