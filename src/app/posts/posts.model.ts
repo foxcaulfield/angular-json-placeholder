@@ -33,3 +33,14 @@ export interface PostsModel {
 }
 
 export interface PostCreateDto extends Omit<PostsModel, "id" | "reactions" | "views"> {}
+
+// export class PostCreateDto
+//     implements Omit<PostsModel, "id" | "reactions" | "views">
+// {
+//     public constructor(
+//         public body: string,
+//         public title: string,
+//         public userId: number,
+//         public tags: string[]
+//     ) {}
+// }
