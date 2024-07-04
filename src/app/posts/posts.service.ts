@@ -30,25 +30,40 @@ export class PostsService {
         return this.http
             .get<DummyJsonResponse>(`${this.backendUrl}/posts`)
             .pipe(
-                map((result) => result.posts.map(this.transformToInternal)),
+                map((result) => result.posts),
                 catchError(this.handleError)
             );
     }
 
-    public getOneById(id: PostsModel["id"]): Observable<PostsModel> {
-        return this.http
-            .get<ExternalPostModel>(`${this.backendUrl}/${id}`)
-            .pipe(
-                map((result) => this.transformToInternal(result)),
-                catchError(this.handleError)
-            );
-    }
+    // public getOneById(id: PostsModel["id"]): Observable<PostsModel> {
+    //     return this.http
+    //         .get<ExternalPostModel>(`${this.backendUrl}/${id}`)
+    //         .pipe(
+    //             map((result) => {
+    //                 return this.transformToInternal(result);
+    //             }),
+    //             catchError(this.handleError)
+    //         );
+    // }
 
     public create(createDto: PostCreateDto): Observable<PostsModel> {
         return this.http
-            .post<ExternalPostModel>(`${this.backendUrl}/posts/add`, createDto)
+            .post<PostCreateDto & { id: number }>(
+                `${this.backendUrl}/posts/add`,
+                createDto
+            )
             .pipe(
-                map((result) => this.transformToInternal(result)),
+                map((result) => {
+                    return {
+                        ...result,
+                        id: this.uniqueRandomIntService.generateUniqueRandomInt(),
+                        views: 0,
+                        reactions: {
+                            likes: 0,
+                            dislikes: 0,
+                        },
+                    };
+                }),
                 catchError(this.handleError)
             );
     }
@@ -59,14 +74,15 @@ export class PostsService {
 
     // Error handling
     private handleError(error: { message?: unknown }): Observable<never> {
+        console.error("An error occurred", error);
         return throwError(() => error);
     }
 
-    private transformToInternal(extenal: ExternalPostModel): PostsModel {
-        return {
-            ...extenal,
-            id: this.uniqueRandomIntService.generateUniqueRandomInt(),
-        };
-    }
+    // private transformToInternal(extenal: ExternalPostModel): PostsModel {
+    //     return {
+    //         ...extenal,
+    //         id: this.uniqueRandomIntService.generateUniqueRandomInt(),
+    //     };
+    // }
 }
 ``;
