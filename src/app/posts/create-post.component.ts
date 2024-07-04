@@ -92,21 +92,11 @@ export class CreatePostComponent {
                     item: {
                         body,
                         title,
-                        userId: "1",
+                        tags: ["common"],
+                        userId: 1,
                     },
                 })
             );
         }
     }
-    // public createPost(): void {
-    //     return this.store.dispatch(
-    //         postsActions.create({
-    //             item: {
-    //                 body: "qwertyasdfgzxcvbqwert",
-    //                 title: "asdfgzxcvb",
-    //                 userId: "1",
-    //             },
-    //         })
-    //     );
-    // }
 }

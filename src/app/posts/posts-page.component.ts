@@ -34,6 +34,11 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
             [title]="post.title"
             [body]="post.body"
             [postId]="post.id"
+            [likes]="post.reactions.likes"
+            [dislikes]="post.reactions.dislikes"
+            [tags]="post.tags"
+            [views]="post.views"
+            [userId]="post.userId"
         ></app-post-item>
         } }
     `,
