@@ -37,7 +37,7 @@ export const postsFeature = createFeature({
         immerOn(postsActions.createSuccess, (state, action) => {
             state.isLoading = false;
             state.error = null;
-            state.items.push(action.item);
+            state.items.unshift(action.item);
         }),
         immerOn(postsActions.createFailure, (state, action) => {
             state.isLoading = false;
