@@ -63,6 +63,25 @@ export const postsFeature = createFeature({
         immerOn(postsActions.deleteFailure, (state, action) => {
             state.isLoading = false;
             state.error = action.error;
+        }),
+
+        immerOn(postsActions.update, (state) => {
+            state.isLoading = true;
+        }),
+        immerOn(postsActions.updateSuccess, (state, action) => {
+            state.isLoading = false;
+            state.error = null;
+            // state.items.unshift(action.item);
+            const index = state.items.findIndex(
+                (obj) => obj.id === action.id
+            );
+            if (index !== -1) {
+                state.items[index] = {...state.items[index], ...action.item};
+            }
+        }),
+        immerOn(postsActions.updateFailure, (state, action) => {
+            state.isLoading = false;
+            state.error = action.error;
         })
     ),
 });

@@ -70,4 +70,23 @@ export class postsEffects {
             )
         );
     });
+
+    public updatePost$ = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(postsActions.update),
+            mergeMap((data) =>
+                this.postsService.update(data.id, data.item).pipe(
+                    delay(DELAY),
+                    map((item) => postsActions.updateSuccess(item)),
+                    catchError(({ message }: ErrorWithMessage) =>
+                        of(
+                            postsActions.updateFailure({
+                                error: message || "An error occured",
+                            })
+                        )
+                    )
+                )
+            )
+        );
+    });
 }

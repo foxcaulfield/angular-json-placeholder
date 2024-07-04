@@ -33,6 +33,7 @@ export interface PostsModel {
 }
 
 export interface PostCreateDto extends Omit<PostsModel, "id" | "reactions" | "views"> {}
+export interface PostUpdateDto extends Partial<PostCreateDto> {}
 
 // export class PostCreateDto
 //     implements Omit<PostsModel, "id" | "reactions" | "views">

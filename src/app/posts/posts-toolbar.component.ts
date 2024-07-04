@@ -17,7 +17,7 @@ import { CreatePostComponent } from "./create-post.component";
             <span>Posts page</span>
             <span class="example-spacer"></span>
 
-            <button mat-raised-button (click)="openDialog()">
+            <button mat-raised-button (click)="openCreateDialog()">
                 <mat-icon>add</mat-icon>
                 add
             </button>
@@ -38,7 +38,7 @@ import { CreatePostComponent } from "./create-post.component";
 export class PostsToolbarComponent {
     public readonly dialog: MatDialog = inject(MatDialog);
 
-    public openDialog(): void {
+    public openCreateDialog(): void {
         const dialogRef = this.dialog.open(CreatePostComponent);
         dialogRef.afterClosed().subscribe((result) => {
             console.log(`Dialog result: ${result}`);

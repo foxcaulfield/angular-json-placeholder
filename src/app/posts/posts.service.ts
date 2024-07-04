@@ -1,6 +1,11 @@
 import { Injectable, inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { ExternalPostModel, PostCreateDto, PostsModel } from "./posts.model";
+import {
+    ExternalPostModel,
+    PostCreateDto,
+    PostsModel,
+    PostUpdateDto,
+} from "./posts.model";
 import { Observable, catchError, delay, map, of, throwError } from "rxjs";
 import { RandomDateService } from "../utils/random-date.service";
 import { UniqueRandomIntService } from "../utils/unique-random-int.service";
@@ -60,8 +65,16 @@ export class PostsService {
     public delete(id: PostsModel["id"]): Observable<{ id: PostsModel["id"] }> {
         return of({ id }).pipe(delay(300));
     }
-    // public update(): Observable<PostsModel> {}
-    // public delete(): Observable<PostsModel> {}
+    public update(
+        id: PostsModel["id"],
+        updateDto: PostUpdateDto
+    ): Observable<{item: PostUpdateDto, id: PostsModel["id"] }> {
+        return of({ id, item: updateDto }).pipe(delay(300));
+        // return this.http
+        //     .put<ExternalPostModel>(`${this.backendUrl}/posts/${id}`, updateDto)
+        // .pipe(catchError(this.handleError));
+    }
+
     // public filter(): Observable<PostsModel[]> {}
     // public patch(): Observable<PostsModel> {}
 

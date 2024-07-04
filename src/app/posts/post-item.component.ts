@@ -3,11 +3,13 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { MatCardModule } from "@angular/material/card";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatButtonModule } from "@angular/material/button";
-import { PostsModel } from "./posts.model";
+import { PostsModel, PostUpdateDto } from "./posts.model";
 import { NgFor } from "@angular/common";
 import { MatIconModule } from "@angular/material/icon";
 import { Store } from "@ngrx/store";
 import { postsActions } from "./posts.actions";
+import { MatDialog } from "@angular/material/dialog";
+import { UpdatePostComponent } from "./update-post.component";
 
 @Component({
     selector: "app-post-item",
@@ -68,8 +70,12 @@ import { postsActions } from "./posts.actions";
                     </div>
                     <section>
                         <button mat-button>More</button>
-                        <button mat-button>Update</button>
-                        <button mat-button (click)="delete(postId())">Delete</button>
+                        <button mat-button (click)="openUpdateDialog()">
+                            Update
+                        </button>
+                        <button mat-button (click)="delete(postId())">
+                            Delete
+                        </button>
                     </section>
                 </mat-card-actions>
             </mat-card-footer>
@@ -138,6 +144,7 @@ import { postsActions } from "./posts.actions";
 })
 export class PostItemComponent {
     private store: Store = inject(Store);
+    public readonly dialog: MatDialog = inject(MatDialog);
 
     public title: InputSignal<PostsModel["title"]> =
         input.required<PostsModel["title"]>();
@@ -156,7 +163,24 @@ export class PostItemComponent {
     public userId: InputSignal<PostsModel["userId"]> =
         input.required<PostsModel["userId"]>();
 
-    public delete(id: PostsModel["id"]):void {
-        this.store.dispatch(postsActions.delete({id}))
+    public delete(id: PostsModel["id"]): void {
+        this.store.dispatch(postsActions.delete({ id }));
+    }
+
+    public update(id: PostsModel["id"], updateDto: PostUpdateDto): void {
+        this.store.dispatch(postsActions.update({ id, item: updateDto }));
+    }
+
+    public openUpdateDialog(): void {
+        const dialogRef = this.dialog.open(UpdatePostComponent, {
+            data: {
+                title: this.title(),
+                body: this.body(),
+                postId: this.postId(),
+            },
+        });
+        dialogRef.afterClosed().subscribe((result) => {
+            console.log(`Dialog result: ${result}`);
+        });
     }
 }
