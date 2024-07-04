@@ -24,7 +24,7 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
             >
                 Home
             </button>
-            <span class="example-spacer"></span>
+            <span class="spacer"></span>
 
             <button
                 mat-button
@@ -86,7 +86,7 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
         .mat-accent {
             background: rgba(255, 255, 255, 0.2)
         }
-        .example-spacer {
+        .spacer {
         flex: 1 1 auto;
         }
         .toolbar {
