@@ -8,11 +8,12 @@ import {
     Validators,
 } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
-import { MatDialogModule } from "@angular/material/dialog";
+import { MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { Store } from "@ngrx/store";
 import { postsActions } from "./posts.actions";
+import { RandomTextService } from "../utils/random-text.service";
 
 type TPostForm = FormGroup<{
     title: FormControl<string | null>;
@@ -58,6 +59,14 @@ type TPostForm = FormGroup<{
                     }
                 </mat-form-field>
                 <mat-dialog-actions align="end">
+                    <button
+                        type="button"
+                        mat-button
+                        (click)="setRandomContent()"
+                    >
+                        Set random content
+                    </button>
+                    <span class="spacer"></span>
                     <button mat-button cdkFocusInitial>Save</button>
                     <button mat-button mat-dialog-close>Cancel</button>
                 </mat-dialog-actions>
@@ -69,10 +78,24 @@ type TPostForm = FormGroup<{
             mat-form-field {
                 width: 100%;
             }
+            .spacer {
+                flex: 1 1 auto;
+                margin: auto;
+            }
+            // .button-row {
+            //     display: flex;
+            //     justify-content: end;
+            //     padding: var(
+            //         --mat-dialog-with-actions-content-padding,
+            //         20px 24px
+            //     );
+            // }
         `,
     ],
 })
 export class CreatePostComponent {
+    private dialogRef: MatDialogRef<CreatePostComponent> = inject(MatDialogRef<CreatePostComponent>)
+    private randomTextService: RandomTextService = inject(RandomTextService);
     private store: Store = inject(Store);
     private formBuilder: FormBuilder = inject(FormBuilder);
     public postForm: TPostForm = this.formBuilder.group({
@@ -87,7 +110,7 @@ export class CreatePostComponent {
         } = this.postForm;
 
         if (isValid && body && title) {
-            return this.store.dispatch(
+            this.store.dispatch(
                 postsActions.create({
                     item: {
                         body,
@@ -97,6 +120,14 @@ export class CreatePostComponent {
                     },
                 })
             );
+            this.dialogRef.close();
         }
+    }
+
+    public setRandomContent(): void {
+        return this.postForm.patchValue({
+            title: this.randomTextService.generateTitle(),
+            body: this.randomTextService.generateParagraph(),
+        });
     }
 }
