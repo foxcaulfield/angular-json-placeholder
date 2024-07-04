@@ -52,7 +52,7 @@ export class PostsService {
             .post<PostCreateDto & { id: number }>(
                 `${this.backendUrl}/posts/add`,
                 createDto
-            )
+            ).pipe(delay(3000))
             .pipe(
                 map((result) => {
                     return {

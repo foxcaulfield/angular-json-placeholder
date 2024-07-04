@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    OnDestroy,
+    OnInit,
+} from "@angular/core";
 import { Store } from "@ngrx/store";
 import { postsActions } from "./posts.actions";
 import { postsFeature } from "./posts.reducer";
@@ -23,13 +29,15 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
+        <app-posts-toolbar></app-posts-toolbar>
+        <div class="progress-bar-container">
+            @if (isLoading$ | async) {
+            <mat-progress-bar mode="query"></mat-progress-bar>
+            }
+        </div>
         @if (errorText$ | async; as errorText) {
         <app-error-page [errorText]="errorText" />
-        } @else if (isLoading$ | async) {
-        <mat-progress-bar mode="query"></mat-progress-bar>
-        } @else {
-        <app-posts-toolbar></app-posts-toolbar>
-        @for (post of (items$ | async); track post.id) {
+        } @else { @for (post of (items$ | async); track post.id) {
         <app-post-item
             [title]="post.title"
             [body]="post.body"
@@ -51,6 +59,9 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
                 flex-direction: column;
                 //   align-content: center;
                 margin: auto;
+            }
+            .progress-bar-container {
+                height: 4px; /* Adjust this to match the height of your progress bar */
             }
         `,
     ],
