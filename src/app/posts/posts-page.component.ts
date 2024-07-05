@@ -53,12 +53,12 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
     styles: [
         `
             :host {
-                max-width: 960px;
-                display: flex;
-                //   justify-content: right;
-                flex-direction: column;
-                //   align-content: center;
-                margin: auto;
+                // max-width: 960px;
+                // display: flex;
+                // //   justify-content: right;
+                // flex-direction: column;
+                // //   align-content: center;
+                // margin: auto;
             }
             .progress-bar-container {
                 height: 4px; /* Adjust this to match the height of your progress bar */

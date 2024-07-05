@@ -91,7 +91,8 @@ export class PostsService {
             )
             .pipe(
                 map((result) => ({ id, comments: result.comments })),
-                catchError(this.handleError)
+                catchError(() => of({ id, comments: [] }))
+                // catchError((this.handleError))
             );
     }
     // public filter(): Observable<PostsModel[]> {}

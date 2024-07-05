@@ -19,6 +19,7 @@ import { postsFeature } from "./posts.reducer";
 import { postsActions } from "./posts.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { UpdatePostComponent } from "./update-post.component";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: "app-singe-post-page",
@@ -36,8 +37,10 @@ import { UpdatePostComponent } from "./update-post.component";
         MatIcon,
         MatProgressBar,
         AsyncPipe,
+        MatButtonModule
     ],
-    template: `{{ postId }}
+    template: `
+        <!-- {{ postId }}
         <button (click)="toPosts()">To posts</button>
         @if (postItem$ | async; as post) {
         <p>{{ post.title }}</p>
@@ -58,8 +61,92 @@ import { UpdatePostComponent } from "./update-post.component";
         <p>{{ comment.user.fullName }}</p>
         <p>{{ comment.user.id }}</p>
         <p>{{ comment.user.username }}</p>
-        } } } `,
-    styles: [``],
+        } } } -->
+        <div class="container">
+            <button mat-stroked-button color="primary" (click)="toPosts()">Back to Posts</button>
+            @if (postItem$ | async; as post) {
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>{{ post.title }}</mat-card-title>
+                        <mat-card-subtitle>Post ID: {{ post.id }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <p>{{ post.body }}</p>
+                        <div class="reactions">
+                            <mat-icon>thumb_up</mat-icon> {{ post.reactions.likes }}
+                            <mat-icon>thumb_down</mat-icon> {{ post.reactions.dislikes }}
+                        </div>
+                        <div class="tags">
+                            <mat-chip-listbox>
+                                @for (tag of post.tags; track $index) {
+                                    <mat-chip>{{ tag }}</mat-chip>
+                                }
+                            </mat-chip-listbox>
+                        </div>
+                        <p>Views: {{ post.views }}</p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button color="accent" (click)="openUpdateDialog()">Update</button>
+                        <button mat-raised-button color="warn" (click)="delete(post.id)">Delete</button>
+                    </mat-card-actions>
+                </mat-card>
+                <div class="comments-section">
+                    <h3>Comments</h3>
+                    @if (comments$ | async; as comments) {
+                        @for (comment of comments; track $index) {
+                            <mat-card>
+                                <mat-card-content>
+                                    <p>{{ comment.body }}</p>
+                                    <div class="comment-details">
+                                        <span>Comment ID: {{ comment.id }}</span>
+                                        <span>Post ID: {{ comment.postId }}</span>
+                                        <span>Likes: {{ comment.likes }}</span>
+                                        <span>User: {{ comment.user.fullName }} ({{ comment.user.username }})</span>
+                                    </div>
+                                </mat-card-content>
+                            </mat-card>
+                        }
+                    }
+                </div>
+            }
+        </div>
+    `,
+    styles: [` .container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+    mat-card {
+        margin-bottom: 16px;
+    }
+    mat-card-content p {
+        margin: 0;
+        font-size: 14px;
+    }
+    .reactions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 8px 0;
+    }
+    .tags {
+        margin: 8px 0;
+    }
+    .comments-section {
+        margin-top: 16px;
+    }
+    .comment-details {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        color: gray;
+    }
+    mat-card-actions {
+        display: flex;
+        justify-content: flex-end;
+    }`],
 })
 export class SinglePostPageComponent implements OnInit {
     private store: Store = inject(Store);
@@ -102,23 +189,23 @@ export class SinglePostPageComponent implements OnInit {
 
     public openUpdateDialog(): void {
         this.postItem$
-        .pipe(
-            filter(post => !!post), // Ensure the post is not null or undefined
-            take(1) // Take only the first emitted value
-        )
-        .subscribe((post) => {
-            const dialogRef = this.dialog.open(UpdatePostComponent, {
-                data: {
-                    title: post?.title,
-                    body: post?.body,
-                    postId: post?.id,
-                },
-            });
+            .pipe(
+                filter((post) => !!post), // Ensure the post is not null or undefined
+                take(1) // Take only the first emitted value
+            )
+            .subscribe((post) => {
+                const dialogRef = this.dialog.open(UpdatePostComponent, {
+                    data: {
+                        title: post?.title,
+                        body: post?.body,
+                        postId: post?.id,
+                    },
+                });
 
-            dialogRef.afterClosed().subscribe((result) => {
-                console.log(`Dialog result: ${result}`);
+                dialogRef.afterClosed().subscribe((result) => {
+                    console.log(`Dialog result: ${result}`);
+                });
             });
-        });
     }
     // public constructor(private route: ActivatedRoute) {
     // Retrieve the 'id' parameter from the route

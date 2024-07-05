@@ -13,6 +13,14 @@ import { NavbarComponent } from "./common/navbar.component";
     styles: `
     .content {
   padding-top: 64px; /* Adjust this value to the height of your toolbar */
+  
+    // max-width: 960px;
+    max-width: 960px;
+                display: flex;
+                //   justify-content: right;
+                flex-direction: column;
+                //   align-content: center;
+                margin: auto;
 }
     `,
 })
