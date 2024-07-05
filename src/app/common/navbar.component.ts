@@ -38,42 +38,6 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
             <button
                 mat-button
                 class="button"
-                routerLink="/comments"
-                routerLinkActive="mat-accent"
-                ariaCurrentWhenActive="page"
-            >
-                Comments
-            </button>
-            <button
-                mat-button
-                class="button"
-                routerLink="/albums"
-                routerLinkActive="mat-accent"
-                ariaCurrentWhenActive="page"
-            >
-                Albums
-            </button>
-            <button
-                mat-button
-                class="button"
-                routerLink="/photos"
-                routerLinkActive="mat-accent"
-                ariaCurrentWhenActive="page"
-            >
-                Photos
-            </button>
-            <button
-                mat-button
-                class="button"
-                routerLink="/todos"
-                routerLinkActive="mat-accent"
-                ariaCurrentWhenActive="page"
-            >
-                Todos
-            </button>
-            <button
-                mat-button
-                class="button"
                 routerLink="/users"
                 routerLinkActive="mat-accent"
                 ariaCurrentWhenActive="page"
