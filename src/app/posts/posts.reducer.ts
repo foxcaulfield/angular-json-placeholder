@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type*/
 import { createFeature, createReducer, createSelector } from "@ngrx/store";
 import { postsActions, postsFeatureName } from "./posts.actions";
 import { PostsModel } from "./posts.model";
@@ -103,11 +104,6 @@ export const postsFeature = createFeature({
         })
     ),
     extraSelectors(baseSelectors) {
-        // const selectIsDoneItems = createSelector(
-        //   baseSelectors.selectItems,
-        //   (items) => items.filter((item) => item.isDone)
-        // );
-
         /**
          * Actual type is quite complex
          *
@@ -121,7 +117,6 @@ export const postsFeature = createFeature({
          * @param itemId
          * @returns
          */
-        /* eslint-disable @typescript-eslint/explicit-function-return-type*/
         const selectById = (itemId: PostsModel["id"]) =>
             createSelector(baseSelectors.selectItems, (items) =>
                 items.find((item) => item.id === itemId)
