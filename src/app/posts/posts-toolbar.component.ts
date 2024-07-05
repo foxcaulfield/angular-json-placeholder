@@ -21,10 +21,10 @@ import { CreatePostComponent } from "./create-post.component";
                 <mat-icon>add</mat-icon>
                 add
             </button>
-            <button mat-raised-button>
+            <!-- <button mat-raised-button>
                 <mat-icon>filter_alt</mat-icon>
                 filter
-            </button>
+            </button> -->
         </mat-toolbar>
     `,
     styles: [

@@ -40,7 +40,7 @@ export class PostsService {
 
     public getAll(): Observable<PostsModel[]> {
         return this.http
-            .get<DummyJsonPostsResponse>(`${this.backendUrl}/posts`)
+            .get<DummyJsonPostsResponse>(`${this.backendUrl}/posts?limit=3`)
             .pipe(
                 map((result) => result.posts),
                 catchError(this.handleError)
