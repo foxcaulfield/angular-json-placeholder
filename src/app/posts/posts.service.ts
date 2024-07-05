@@ -35,13 +35,14 @@ export class PostsService {
     private uniqueRandomIntService: UniqueRandomIntService = inject(
         UniqueRandomIntService
     );
-
+    private readonly delayMs: number = 600;
     public constructor() {}
 
     public getAll(): Observable<PostsModel[]> {
         return this.http
             .get<DummyJsonPostsResponse>(`${this.backendUrl}/posts?limit=3`)
             .pipe(
+                delay(this.delayMs),
                 map((result) => result.posts),
                 catchError(this.handleError)
             );
@@ -52,8 +53,9 @@ export class PostsService {
             .post<PostCreateDto & { id: number }>(
                 `${this.backendUrl}/posts/add`,
                 createDto
-            ).pipe(delay(3000))
+            )
             .pipe(
+                delay(this.delayMs),
                 map((result) => {
                     return {
                         ...result,
@@ -70,13 +72,13 @@ export class PostsService {
     }
 
     public delete(id: PostsModel["id"]): Observable<{ id: PostsModel["id"] }> {
-        return of({ id }).pipe(delay(300));
+        return of({ id }).pipe(delay(this.delayMs));
     }
     public update(
         id: PostsModel["id"],
         updateDto: PostUpdateDto
     ): Observable<{ item: PostUpdateDto; id: PostsModel["id"] }> {
-        return of({ id, item: updateDto }).pipe(delay(300));
+        return of({ id, item: updateDto }).pipe(delay(this.delayMs));
         // return this.http
         //     .put<ExternalPostModel>(`${this.backendUrl}/posts/${id}`, updateDto)
         // .pipe(catchError(this.handleError));
@@ -90,24 +92,12 @@ export class PostsService {
                 `${this.backendUrl}/posts/${id}/comments`
             )
             .pipe(
+                delay(this.delayMs),
                 map((result) => ({ id, comments: result.comments })),
                 catchError(() => of({ id, comments: [] }))
                 // catchError((this.handleError))
             );
     }
-    // public filter(): Observable<PostsModel[]> {}
-    // public patch(): Observable<PostsModel> {}
-
-    // public getOneById(id: PostsModel["id"]): Observable<PostsModel> {
-    //     return this.http
-    //         .get<ExternalPostModel>(`${this.backendUrl}/${id}`)
-    //         .pipe(
-    //             map((result) => {
-    //                 return this.transformToInternal(result);
-    //             }),
-    //             catchError(this.handleError)
-    //         );
-    // }
 
     // Error handling
     private handleError(error: { message?: unknown }): Observable<never> {
