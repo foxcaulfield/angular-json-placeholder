@@ -29,12 +29,12 @@ import { PostsToolbarComponent } from "./posts-toolbar.component";
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
-        <app-posts-toolbar></app-posts-toolbar>
         <div class="progress-bar-container">
             @if (isLoading$ | async) {
             <mat-progress-bar mode="query"></mat-progress-bar>
             }
         </div>
+        <app-posts-toolbar></app-posts-toolbar>
         @if (errorText$ | async; as errorText) {
         <app-error-page [errorText]="errorText" />
         } @else { @for (post of (items$ | async); track post.id) {
