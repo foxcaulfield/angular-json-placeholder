@@ -25,6 +25,7 @@
     "@ngrx/store-devtools": "^18.0.1",
     "immer": "^10.1.1",
     "ngrx-immer": "^2.2.1",
+    "ngx-infinite-scroll": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "txtgen": "^3.0.7",
