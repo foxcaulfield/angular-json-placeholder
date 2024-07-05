@@ -37,116 +37,146 @@ import { MatButtonModule } from "@angular/material/button";
         MatIcon,
         MatProgressBar,
         AsyncPipe,
-        MatButtonModule
+        MatButtonModule,
     ],
     template: `
-        <!-- {{ postId }}
-        <button (click)="toPosts()">To posts</button>
-        @if (postItem$ | async; as post) {
-        <p>{{ post.title }}</p>
-        <p>{{ post.body }}</p>
-        <p>{{ post.id }}</p>
-        <p>{{ post.reactions.likes }}</p>
-        <p>{{ post.reactions.dislikes }}</p>
-        <p>{{ post.tags }}</p>
-        <p>{{ post.views }}</p>
-        <button mat-button (click)="openUpdateDialog()">Update</button>
-        <button mat-button (click)="delete(post.id)">Delete</button>
-        @if (comments$ | async) { @for (comment of (comments$ | async); track
-        $index) {
-        <p>{{ comment.id }}</p>
-        <p>{{ comment.body }}</p>
-        <p>{{ comment.postId }}</p>
-        <p>{{ comment.likes }}</p>
-        <p>{{ comment.user.fullName }}</p>
-        <p>{{ comment.user.id }}</p>
-        <p>{{ comment.user.username }}</p>
-        } } } -->
+        <div class="progress-bar-container">
+            @if (isLoading$ | async) {
+            <mat-progress-bar mode="query"></mat-progress-bar>
+            }
+        </div>
         <div class="container">
-            <button mat-stroked-button color="primary" (click)="toPosts()">Back to Posts</button>
+            <button mat-stroked-button color="primary" (click)="toPosts()">
+                Back to Posts
+            </button>
             @if (postItem$ | async; as post) {
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>{{ post.title }}</mat-card-title>
+                    <mat-card-subtitle
+                        >Post ID: {{ post.id }}</mat-card-subtitle
+                    >
+                </mat-card-header>
+                <mat-card-content>
+                    <p>{{ post.body }}</p>
+                    <div class="reactions">
+                        <mat-icon>thumb_up</mat-icon>
+                        {{ post.reactions.likes }}
+                        <mat-icon>thumb_down</mat-icon>
+                        {{ post.reactions.dislikes }}
+                    </div>
+                    <div class="tags">
+                        <mat-chip-listbox>
+                            @for (tag of post.tags; track $index) {
+                            <mat-chip>{{ tag }}</mat-chip>
+                            }
+                        </mat-chip-listbox>
+                    </div>
+                    <p>Views: {{ post.views }}</p>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button
+                        mat-raised-button
+                        color="accent"
+                        (click)="openUpdateDialog()"
+                    >
+                        Update
+                    </button>
+                    <button
+                        mat-raised-button
+                        color="warn"
+                        (click)="delete(post.id)"
+                    >
+                        Delete
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+            <div class="comments-section">
+                <h3>Comments</h3>
+                @if (comments$ | async; as comments) { @for (comment of
+                comments; track $index) {
                 <mat-card>
-                    <mat-card-header>
-                        <mat-card-title>{{ post.title }}</mat-card-title>
-                        <mat-card-subtitle>Post ID: {{ post.id }}</mat-card-subtitle>
-                    </mat-card-header>
                     <mat-card-content>
-                        <p>{{ post.body }}</p>
-                        <div class="reactions">
-                            <mat-icon>thumb_up</mat-icon> {{ post.reactions.likes }}
-                            <mat-icon>thumb_down</mat-icon> {{ post.reactions.dislikes }}
+                        <p>{{ comment.body }}</p>
+                        <div class="comment-details">
+                            <span>Comment ID: {{ comment.id }}</span>
+                            <span>Post ID: {{ comment.postId }}</span>
+                            <span>Likes: {{ comment.likes }}</span>
+                            <span
+                                >User: {{ comment.user.fullName }} ({{
+                                    comment.user.username
+                                }})</span
+                            >
                         </div>
-                        <div class="tags">
-                            <mat-chip-listbox>
-                                @for (tag of post.tags; track $index) {
-                                    <mat-chip>{{ tag }}</mat-chip>
-                                }
-                            </mat-chip-listbox>
-                        </div>
-                        <p>Views: {{ post.views }}</p>
                     </mat-card-content>
-                    <mat-card-actions>
-                        <button mat-raised-button color="accent" (click)="openUpdateDialog()">Update</button>
-                        <button mat-raised-button color="warn" (click)="delete(post.id)">Delete</button>
-                    </mat-card-actions>
                 </mat-card>
-                <div class="comments-section">
-                    <h3>Comments</h3>
-                    @if (comments$ | async; as comments) {
-                        @for (comment of comments; track $index) {
-                            <mat-card>
-                                <mat-card-content>
-                                    <p>{{ comment.body }}</p>
-                                    <div class="comment-details">
-                                        <span>Comment ID: {{ comment.id }}</span>
-                                        <span>Post ID: {{ comment.postId }}</span>
-                                        <span>Likes: {{ comment.likes }}</span>
-                                        <span>User: {{ comment.user.fullName }} ({{ comment.user.username }})</span>
-                                    </div>
-                                </mat-card-content>
-                            </mat-card>
-                        }
-                    }
-                </div>
+                } }
+            </div>
+            } @else {
+            <div class="no-post-container">
+                <mat-icon color="warn" class="no-post-icon">info</mat-icon>
+                <p class="no-post-message">No post with such ID.</p>
+            </div>
             }
         </div>
     `,
-    styles: [` .container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        padding: 16px;
-    }
-    mat-card {
-        margin-bottom: 16px;
-    }
-    mat-card-content p {
-        margin: 0;
-        font-size: 14px;
-    }
-    .reactions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 8px 0;
-    }
-    .tags {
-        margin: 8px 0;
-    }
-    .comments-section {
-        margin-top: 16px;
-    }
-    .comment-details {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        font-size: 12px;
-        color: gray;
-    }
-    mat-card-actions {
-        display: flex;
-        justify-content: flex-end;
-    }`],
+    styles: [
+        `
+            .container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
+            mat-card {
+                margin-bottom: 16px;
+            }
+            mat-card-content p {
+                margin: 0;
+                font-size: 14px;
+            }
+            .reactions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 8px 0;
+            }
+            .tags {
+                margin: 8px 0;
+            }
+            .comments-section {
+                margin-top: 16px;
+            }
+            .comment-details {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                font-size: 12px;
+                color: gray;
+            }
+            mat-card-actions {
+                display: flex;
+                justify-content: flex-end;
+            }
+            .progress-bar-container {
+                height: 4px; /* Adjust this to match the height of your progress bar */
+            }
+            .no-post-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                padding: 16px;
+                text-align: center;
+            }
+
+            .no-post-message {
+                font-size: 18px;
+                color: #757575; /* Grey color */
+            }
+        `,
+    ],
 })
 export class SinglePostPageComponent implements OnInit {
     private store: Store = inject(Store);
@@ -161,19 +191,38 @@ export class SinglePostPageComponent implements OnInit {
     public comments$: Observable<CommentModel[] | undefined> = new Observable<
         CommentModel[] | undefined
     >();
-
+    public isLoading$: Observable<boolean> = this.store.select(
+        postsFeature.selectIsLoading
+    );
     public ngOnInit(): void {
         this.route.paramMap.subscribe((params) => {
             const id = parseInt(params.get("id") || "", 10);
+            // TODO Check post is exist in store
             if (isNaN(id) && id) {
                 this.router.navigate(["error"]);
             } else {
                 this.postId = id;
                 this.postItem$ = this.store.select(postsFeature.selectById(id));
-                this.store.dispatch(postsActions.getComments({ id }));
-                this.comments$ = this.store.select(
-                    postsFeature.selectCommentsById(this.postId)
-                );
+                // this.store.dispatch(postsActions.getComments({ id }));
+
+                this.postItem$.subscribe((post) => {
+                    if (!post) {
+                        // TODO add single post loading
+                        this.router.navigate(["posts"]);
+                    } else {
+                        this.comments$ = this.store.select(
+                            postsFeature.selectCommentsById(post.id)
+                        );
+
+                        this.comments$.subscribe((comments) => {
+                            if (!comments) {
+                                this.store.dispatch(
+                                    postsActions.getComments({ id })
+                                );
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -207,26 +256,4 @@ export class SinglePostPageComponent implements OnInit {
                 });
             });
     }
-    // public constructor(private route: ActivatedRoute) {
-    // Retrieve the 'id' parameter from the route
-    // this.route.paramMap.subscribe((params) => {
-    //     this.postId = params.get("id");
-    // });
-    // }
-
-    // public ngOnInit(): void {
-    //     this.route.paramMap
-    //         .pipe(
-    //             map((params) => parseInt(params.get("id") || "", 10)),
-    //             map((id) => (this.postId = id)),
-    //             map((id) => this.store.select(postsFeature.selectById(id))),
-    //             map((post) => {
-    //                 if (!post) {
-    //                     this.router.navigate(["/error"]); // Redirect to error page
-    //                 }
-    //                 return post;
-    //             })
-    //         )
-    //         .subscribe((post) => (this.postItem$ = post));
-    // }
 }
