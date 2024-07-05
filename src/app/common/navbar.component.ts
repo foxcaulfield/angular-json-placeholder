@@ -3,6 +3,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterLink, RouterLinkActive } from "@angular/router";
+import { NavbarItemComponent } from "./navbar-item.component";
 
 @Component({
     selector: "app-navbar",
@@ -13,6 +14,7 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
         MatIconModule,
         RouterLink,
         RouterLinkActive,
+        NavbarItemComponent,
     ],
     template: `
         <mat-toolbar class="toolbar">
@@ -25,31 +27,15 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
                 Home
             </button>
             <span class="spacer"></span>
-
-            <button
-                mat-button
-                class="button"
-                routerLink="/posts"
-                routerLinkActive="mat-accent"
-                ariaCurrentWhenActive="page"
-            >
-                Posts
-            </button>
-            <button
-                mat-button
-                class="button"
-                routerLink="/users"
-                routerLinkActive="mat-accent"
-                ariaCurrentWhenActive="page"
-            >
-                Users
-            </button>
+            @for(item of items; track $index) {
+            <app-navbar-item
+                [linkValue]="item.link"
+                [nameValue]="item.name"
+            ></app-navbar-item>
+            }
         </mat-toolbar>
     `,
     styles: `
-        .mat-accent {
-            background: rgba(255, 255, 255, 0.2)
-        }
         .spacer {
         flex: 1 1 auto;
         }
@@ -61,4 +47,10 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
         }
   `,
 })
-export class NavbarComponent {}
+export class NavbarComponent {
+    public items: Array<{ link: string; name: string }> = [
+        { link: "/posts", name: "Posts" },
+        { link: "/recipes", name: "Recipes" },
+        { link: "/users", name: "Users" },
+    ];
+}
