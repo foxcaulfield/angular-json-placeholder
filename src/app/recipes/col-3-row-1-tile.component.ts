@@ -3,12 +3,12 @@ import { RecipeModel } from "./recipes.model";
 import { MatCardModule } from "@angular/material/card";
 import { MatRippleModule } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatChipsModule } from "@angular/material/chips";
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TileDetailsComponent } from "./tile-details.component";
 import { JsonPipe } from "@angular/common";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { MatChipsModule } from "@angular/material/chips";
 
 @Component({
     selector: "app-3-1-tile",
@@ -20,19 +20,15 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
         MatCardModule,
         MatRippleModule,
         MatButtonModule,
+        MatTooltipModule,
         MatIconModule,
-        MatChipsModule,
+        MatProgressBarModule,
         TileDetailsComponent,
         JsonPipe,
-        MatProgressBarModule
+        MatChipsModule
     ],
     template: `
-        <mat-card matRipple class="card" appearance="outlined" [@cardHover]="hoverState" (mouseenter)="hoverState='hover'" (mouseleave)="hoverState='normal'">
-            <!-- <mat-card-header>
-                <mat-icon>kitchen</mat-icon>
-                <mat-card-title>{{ recipe().name }}</mat-card-title>
-                <mat-card-subtitle>{{ recipe().cuisine }}</mat-card-subtitle>
-            </mat-card-header> -->
+        <mat-card matRipple class="card" appearance="outlined">
             <mat-card-content class="mat-card-content-basic">
                 <div class="picture child child-basic">
                     <img
@@ -45,7 +41,10 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
                     <app-tile-details [recipe]="recipe()" />
                 </div>
                 <div class="extra-info child child-basic">
-                    <p>For {{ recipe().servings }} servings</p>
+                    <p matTooltip="Number of servings this recipe makes">
+                        <mat-icon>restaurant</mat-icon>
+                        For {{ recipe().servings }} servings
+                    </p>
                     <p>
                         <mat-icon>local_fire_department</mat-icon> 
                         Calories: {{ recipe().caloriesPerServing }}
@@ -63,7 +62,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
                 </div>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button color="primary">Cook Now</button>
+                <button mat-button color="primary" matTooltip="Click to start cooking!">Cook Now</button>
             </mat-card-actions>
         </mat-card>
     `,
@@ -79,21 +78,6 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
                 flex-direction: row;
             }
         `,
-    ],
-    animations: [
-        trigger('cardHover', [
-            state('normal', style({
-                transform: 'scale(1)',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-            })),
-            state('hover', style({
-                transform: 'scale(1)',
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
-            })),
-            transition('normal <=> hover', [
-                animate('300ms ease-in-out')
-            ])
-        ])
     ]
 })
 export class Col3Row1TileComponent {
