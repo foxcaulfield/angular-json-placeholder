@@ -39,12 +39,12 @@ import { Col1Row2TileComponent } from "./col-1-row-2-tile.component";
             (scrolled)="onScrollDown($event)"
             (scrolledUp)="onUp($event)"
         >
-            <mat-grid-list [cols]="cols" rowHeight="300px">
+            <mat-grid-list [cols]="cols" rowHeight="300px" [gutterSize]="'16px'">
                 @for(item of items$ | async; track item.id; let idx = $index) {
                 <mat-grid-tile
                     [colspan]="getColSpan(idx)"
                     [rowspan]="getRowSpan(idx)"
-                    >
+                >
                     <!-- [style.background]="'grey'" -->
                      @switch (true) {
                         @case (getColSpan(idx) === 3 && getRowSpan(idx) === 1) {<app-3-1-tile [recipe]="item" />}
@@ -52,24 +52,16 @@ import { Col1Row2TileComponent } from "./col-1-row-2-tile.component";
                         @case (getColSpan(idx) === 1 && getRowSpan(idx) === 1) {<app-1-1-tile [recipe]="item" />}
                         @case (getColSpan(idx) === 1 && getRowSpan(idx) === 2) {<app-1-2-tile [recipe]="item" />}
                      }
-          
                 </mat-grid-tile>
                 }
             </mat-grid-list>
-            <!-- @for(item of items$ | async; track item.id) { @defer (on timer(2s)) -->
-            <!-- @for(item of items$ | async; track item.id) {
-            <div style="padding: 50px">{{ item.id }} {{ item.name }}</div>
-            } -->
-            <!-- @placeholder {
-          <div style="padding: 50px"> loading </div>
-          } -->
         </div>
     `,
     styles: [
         `
-            * {
-                font-family: Lato;
-            }
+            // * {
+            //     font-family: Lato;
+            // }
             .tiles-wrapper {
                 height: 100%;
             }
@@ -177,5 +169,9 @@ export class RecipesPageComponent implements OnInit, OnDestroy {
             // { colspan: 3, rowspan: 1 },
         ];
         return sizeMap[id % sizeMap.length];
+    }
+
+    public getRowHeight(): string {
+        return this.cols === 1 ? '1:2' : '1:1';
     }
 }
