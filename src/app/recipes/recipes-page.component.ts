@@ -9,6 +9,11 @@ import { InfiniteScrollDirective } from "ngx-infinite-scroll";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { NotFoundComponent } from "../common/not-found.component";
+import { Col3Row1TileComponent } from "./col-3-row-1-tile.component";
+import { Col2Row1TileComponent } from "./col-2-row-1-tile.component";
+import { Col1Row1TileComponent } from "./col-1-row-1-tile.component";
+import { Col1Row2TileComponent } from "./col-1-row-2-tile.component";
 
 @Component({
     selector: "app-recipes-page",
@@ -17,11 +22,16 @@ import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
         AsyncPipe,
         InfiniteScrollDirective,
         MatGridListModule,
-        MatCardModule
+        MatCardModule,
+        Col3Row1TileComponent,
+        Col2Row1TileComponent,
+        Col1Row1TileComponent,
+        Col1Row2TileComponent,
+        NotFoundComponent,
     ],
     template: `
         <div
-            class="search-results"
+            class="tiles-wrapper"
             infinite-scroll
             [infiniteScrollDistance]="scrollDistance"
             [infiniteScrollUpDistance]="scrollUpDistance"
@@ -34,9 +44,15 @@ import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
                 <mat-grid-tile
                     [colspan]="getColSpan(idx)"
                     [rowspan]="getRowSpan(idx)"
-                    [style.background]="'grey'"
-                >
-                    {{ item.name }}
+                    >
+                    <!-- [style.background]="'grey'" -->
+                     @switch (true) {
+                        @case (getColSpan(idx) === 3 && getRowSpan(idx) === 1) {<app-3-1-tile [recipe]="item" />}
+                        @case (getColSpan(idx) === 2 && getRowSpan(idx) === 1) {<app-2-1-tile [recipe]="item" />}
+                        @case (getColSpan(idx) === 1 && getRowSpan(idx) === 1) {<app-1-1-tile [recipe]="item" />}
+                        @case (getColSpan(idx) === 1 && getRowSpan(idx) === 2) {<app-1-2-tile [recipe]="item" />}
+                     }
+          
                 </mat-grid-tile>
                 }
             </mat-grid-list>
@@ -54,11 +70,11 @@ import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
             * {
                 font-family: Lato;
             }
-            .search-results {
+            .tiles-wrapper {
                 height: 100%;
             }
-            mat-card {
-                padding: 20px;
+            mat-grid-tile {
+                display: inline-block;
             }
         `,
     ],
