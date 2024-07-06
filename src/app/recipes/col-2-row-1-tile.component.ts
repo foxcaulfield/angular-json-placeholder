@@ -4,21 +4,25 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatRippleModule } from "@angular/material/core";
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { TileDetailsComponent } from "./tile-details.component";
 
 @Component({
     selector: "app-2-1-tile",
     standalone: true,
-
     imports: [
         MatCardModule,
         MatIconModule,
         MatRippleModule,
         MatChipsModule,
-        TileDetailsComponent,
+        TileDetailsComponent
     ],
     template: `
-        <mat-card matRipple class="card" appearance="outlined">
+        <mat-card matRipple class="card" appearance="outlined" [@cardHover]="hoverState" (mouseenter)="hoverState='hover'" (mouseleave)="hoverState='normal'">
+            <!-- <mat-card-header>
+                <mat-icon>fastfood</mat-icon>
+                <mat-card-title>{{ recipe().name }}</mat-card-title>
+            </mat-card-header> -->
             <mat-card-content class="mat-card-content-basic">
                 <div class="picture child child-basic">
                     <img
@@ -33,12 +37,12 @@ import { TileDetailsComponent } from "./tile-details.component";
             </mat-card-content>
         </mat-card>
     `,
-    styleUrl: "./tile.base.scss",
+    styleUrls: ["./tile.base.scss"],
     styles: [
         `
             .child {
-                flex: 1 1 50%; /* Flex-grow, flex-shrink, and flex-basis to set the width to 50% */
-                box-sizing: border-box; /* Include padding and border in the element's total width and height */
+                flex: 1 1 50%;
+                box-sizing: border-box;
             }
 
             mat-card-content {
@@ -46,7 +50,23 @@ import { TileDetailsComponent } from "./tile-details.component";
             }
         `,
     ],
+    animations: [
+        trigger('cardHover', [
+            state('normal', style({
+                transform: 'scale(1)',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
+            })),
+            state('hover', style({
+                transform: 'scale(1)',
+                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
+            })),
+            transition('normal <=> hover', [
+                animate('300ms ease-in-out')
+            ])
+        ])
+    ]
 })
 export class Col2Row1TileComponent {
     public recipe: InputSignal<RecipeModel> = input.required<RecipeModel>();
+    public hoverState: 'normal' | 'hover' = 'normal';
 }

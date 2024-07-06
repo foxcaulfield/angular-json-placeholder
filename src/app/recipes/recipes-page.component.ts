@@ -2,9 +2,9 @@ import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { Observable, Subject } from "rxjs";
 import { recipesActions } from "./recipes.actions";
-import { selectItems } from "./recipes.reducer";
+import { selectIsLoading, selectItems } from "./recipes.reducer";
 import { RecipeModel } from "./recipes.model";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { InfiniteScrollDirective } from "ngx-infinite-scroll";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
@@ -14,6 +14,7 @@ import { Col3Row1TileComponent } from "./col-3-row-1-tile.component";
 import { Col2Row1TileComponent } from "./col-2-row-1-tile.component";
 import { Col1Row1TileComponent } from "./col-1-row-1-tile.component";
 import { Col1Row2TileComponent } from "./col-1-row-2-tile.component";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @Component({
     selector: "app-recipes-page",
@@ -28,6 +29,8 @@ import { Col1Row2TileComponent } from "./col-1-row-2-tile.component";
         Col1Row1TileComponent,
         Col1Row2TileComponent,
         NotFoundComponent,
+        MatProgressSpinnerModule,
+        CommonModule,
     ],
     template: `
         <div
@@ -39,34 +42,48 @@ import { Col1Row2TileComponent } from "./col-1-row-2-tile.component";
             (scrolled)="onScrollDown($event)"
             (scrolledUp)="onUp($event)"
         >
-            <mat-grid-list [cols]="cols" rowHeight="300px" [gutterSize]="'16px'">
+            <mat-grid-list
+                [cols]="cols"
+                rowHeight="300px"
+                [gutterSize]="'16px'"
+            >
                 @for(item of items$ | async; track item.id; let idx = $index) {
                 <mat-grid-tile
                     [colspan]="getColSpan(idx)"
                     [rowspan]="getRowSpan(idx)"
                 >
-                    <!-- [style.background]="'grey'" -->
-                     @switch (true) {
-                        @case (getColSpan(idx) === 3 && getRowSpan(idx) === 1) {<app-3-1-tile [recipe]="item" />}
-                        @case (getColSpan(idx) === 2 && getRowSpan(idx) === 1) {<app-2-1-tile [recipe]="item" />}
-                        @case (getColSpan(idx) === 1 && getRowSpan(idx) === 1) {<app-1-1-tile [recipe]="item" />}
-                        @case (getColSpan(idx) === 1 && getRowSpan(idx) === 2) {<app-1-2-tile [recipe]="item" />}
-                     }
+                    @switch (true) { @case (getColSpan(idx) === 3 &&
+                    getRowSpan(idx) === 1) {<app-3-1-tile [recipe]="item" />}
+                    @case (getColSpan(idx) === 2 && getRowSpan(idx) === 1)
+                    {<app-2-1-tile [recipe]="item" />} @case (getColSpan(idx)
+                    === 1 && getRowSpan(idx) === 1) {<app-1-1-tile
+                        [recipe]="item"
+                    />} @case (getColSpan(idx) === 1 && getRowSpan(idx) === 2)
+                    {<app-1-2-tile [recipe]="item" />} }
                 </mat-grid-tile>
                 }
             </mat-grid-list>
+            @if (isLoading$ | async){
+            <div class="spinner-wrapper">
+                <mat-spinner></mat-spinner>
+            </div>
+            }
         </div>
     `,
     styles: [
         `
-            // * {
-            //     font-family: Lato;
-            // }
             .tiles-wrapper {
                 height: 100%;
+                position: relative;
             }
             mat-grid-tile {
                 display: inline-block;
+            }
+            .spinner-wrapper {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
         `,
     ],
@@ -83,6 +100,7 @@ export class RecipesPageComponent implements OnInit, OnDestroy {
     public cols: number = 3;
 
     public items$: Observable<RecipeModel[]> = this.store.select(selectItems);
+    public isLoading$: Observable<boolean> = this.store.select(selectIsLoading);
 
     public constructor() {}
 
@@ -148,13 +166,7 @@ export class RecipesPageComponent implements OnInit, OnDestroy {
         return this.getSize(index).rowspan;
     }
 
-    // Function to get the size of the item based on its index
     private getSize(id: number): { colspan: number; rowspan: number } {
-        // 3-1 1-2 1-1 2-1
-        // 1-2 1-1 2-1 3-1
-
-        // 3-1 1-2 1-1 1-1 2-1
-        // 1-1 1-1 1-2 2-1 3-1
         const sizeMap = [
             { colspan: 3, rowspan: 1 },
             { colspan: 1, rowspan: 2 },
@@ -166,12 +178,11 @@ export class RecipesPageComponent implements OnInit, OnDestroy {
             { colspan: 1, rowspan: 1 },
             { colspan: 1, rowspan: 2 },
             { colspan: 2, rowspan: 1 },
-            // { colspan: 3, rowspan: 1 },
         ];
         return sizeMap[id % sizeMap.length];
     }
 
     public getRowHeight(): string {
-        return this.cols === 1 ? '1:2' : '1:1';
+        return this.cols === 1 ? "1:2" : "1:1";
     }
 }

@@ -1,26 +1,24 @@
 import { Component, input, InputSignal } from "@angular/core";
 import { RecipeModel } from "./recipes.model";
+import { MatIconModule } from "@angular/material/icon";
 
 @Component({
     selector: "app-tile-details",
     standalone: true,
-    imports: [],
+    imports: [MatIconModule],
     template: `
         <div class="wrapper">
             <h5>
                 <strong>{{ recipe().name }}</strong>
             </h5>
             <p>
-                <strong>Cook Time:</strong>
-                {{ recipe().cookTimeMinutes }} mins
+                <mat-icon>access_time</mat-icon> {{ recipe().cookTimeMinutes }} mins
             </p>
-            <!-- <p><strong>Servings:</strong> {{ recipe().recipe.servings }}</p> -->
-            <p><strong>Difficulty:</strong> {{ recipe().difficulty }}</p>
             <p>
-                <strong>Rating:</strong> {{ recipe().rating }} ({{
-                    recipe().reviewCount
-                }}
-                reviews)
+                <mat-icon>fitness_center</mat-icon> {{ recipe().difficulty }}
+            </p>
+            <p>
+                <mat-icon>star</mat-icon> {{ recipe().rating }} ({{ recipe().reviewCount }} reviews)
             </p>
         </div>
     `,
@@ -28,6 +26,11 @@ import { RecipeModel } from "./recipes.model";
         `
             .wrapper {
                 padding: 20px;
+            }
+
+            mat-icon {
+                vertical-align: middle;
+                margin-right: 5px;
             }
         `,
     ],
