@@ -100,7 +100,7 @@ import { Router } from "@angular/router";
                     display: flex;
                     flex-direction: row;
                     width: 100%;
-                    justify-content: space-evenly;
+                    justify-content: space-between;
                 }
             }
             .progress-container mat-progress-bar {
