@@ -1,21 +1,19 @@
-import { Component, input, InputSignal } from "@angular/core";
-import { RecipeModel } from "./recipes.model";
+import { Component } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatRippleModule } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatIconModule } from "@angular/material/icon";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { TileDetailsComponent } from "./tile-details.component";
 import { JsonPipe } from "@angular/common";
 import { MatChipsModule } from "@angular/material/chips";
+import { TileBaseComponent } from "./tile-base.component";
 
 @Component({
     selector: "app-3-1-tile",
     standalone: true,
-    host: {
-        "(click)": "focusActiveOption()",
-    },
+
     imports: [
         MatCardModule,
         MatRippleModule,
@@ -25,7 +23,7 @@ import { MatChipsModule } from "@angular/material/chips";
         MatProgressBarModule,
         TileDetailsComponent,
         JsonPipe,
-        MatChipsModule
+        MatChipsModule,
     ],
     template: `
         <mat-card matRipple class="card" appearance="outlined">
@@ -46,23 +44,29 @@ import { MatChipsModule } from "@angular/material/chips";
                         For {{ recipe().servings }} servings
                     </p>
                     <p>
-                        <mat-icon>local_fire_department</mat-icon> 
+                        <mat-icon>local_fire_department</mat-icon>
                         Calories: {{ recipe().caloriesPerServing }}
                     </p>
                     <!-- <mat-progress-bar mode="determinate" [value]="recipe().caloriesPerServing / 2000 * 100"></mat-progress-bar> -->
                     <p>
-                        <mat-icon>label</mat-icon> 
+                        <mat-icon>label</mat-icon>
                         Tags:
                         <mat-chip-listbox>
                             @for (tag of recipe().tags; track $index) {
-                                <mat-chip>{{ tag }}</mat-chip>
+                            <mat-chip>{{ tag }}</mat-chip>
                             }
                         </mat-chip-listbox>
                     </p>
                 </div>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button color="primary" matTooltip="Click to start cooking!">Cook Now</button>
+                <button
+                    mat-button
+                    color="primary"
+                    matTooltip="Click to start cooking!"
+                >
+                    Cook Now
+                </button>
             </mat-card-actions>
         </mat-card>
     `,
@@ -78,13 +82,6 @@ import { MatChipsModule } from "@angular/material/chips";
                 flex-direction: row;
             }
         `,
-    ]
+    ],
 })
-export class Col3Row1TileComponent {
-    public recipe: InputSignal<RecipeModel> = input.required<RecipeModel>();
-    public hoverState: 'normal' | 'hover' = 'normal';
-
-    public focusActiveOption(): void {
-        console.log("Option focused!");
-    }
-}
+export class Col3Row1TileComponent extends TileBaseComponent {}

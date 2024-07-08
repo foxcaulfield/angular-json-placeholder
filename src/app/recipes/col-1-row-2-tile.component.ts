@@ -1,10 +1,16 @@
-import { Component, input, InputSignal } from "@angular/core";
-import { RecipeModel } from "./recipes.model";
+import { Component } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatRippleModule } from "@angular/material/core";
 import { MatIconModule } from "@angular/material/icon";
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import {
+    trigger,
+    state,
+    style,
+    animate,
+    transition,
+} from "@angular/animations";
 import { TileDetailsComponent } from "./tile-details.component";
+import { TileBaseComponent } from "./tile-base.component";
 
 @Component({
     selector: "app-1-2-tile",
@@ -13,10 +19,17 @@ import { TileDetailsComponent } from "./tile-details.component";
         MatCardModule,
         MatRippleModule,
         MatIconModule,
-        TileDetailsComponent
+        TileDetailsComponent,
     ],
     template: `
-        <mat-card matRipple class="card" appearance="outlined" [@cardHover]="hoverState" (mouseenter)="hoverState='hover'" (mouseleave)="hoverState='normal'">
+        <mat-card
+            matRipple
+            class="card"
+            appearance="outlined"
+            [@cardHover]="hoverState"
+            (mouseenter)="hoverState = 'hover'"
+            (mouseleave)="hoverState = 'normal'"
+        >
             <!-- <mat-card-header>
                 <mat-icon>local_dining</mat-icon>
                 <mat-card-title>{{ recipe().name }}</mat-card-title>
@@ -49,22 +62,23 @@ import { TileDetailsComponent } from "./tile-details.component";
         `,
     ],
     animations: [
-        trigger('cardHover', [
-            state('normal', style({
-                transform: 'scale(1)',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
-            })),
-            state('hover', style({
-                transform: 'scale(1)',
-                boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
-            })),
-            transition('normal <=> hover', [
-                animate('300ms ease-in-out')
-            ])
-        ])
-    ]
+        trigger("cardHover", [
+            state(
+                "normal",
+                style({
+                    transform: "scale(1)",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                })
+            ),
+            state(
+                "hover",
+                style({
+                    transform: "scale(1)",
+                    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                })
+            ),
+            transition("normal <=> hover", [animate("300ms ease-in-out")]),
+        ]),
+    ],
 })
-export class Col1Row2TileComponent {
-    public recipe: InputSignal<RecipeModel> = input.required<RecipeModel>();
-    public hoverState: 'normal' | 'hover' = 'normal';
-}
+export class Col1Row2TileComponent extends TileBaseComponent {}
