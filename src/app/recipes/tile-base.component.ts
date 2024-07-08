@@ -1,20 +1,23 @@
-import { Component, input, InputSignal } from "@angular/core";
+import { Component, inject, input, InputSignal } from "@angular/core";
 import { RecipeModel } from "./recipes.model";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "app-tile-base",
     standalone: true,
     imports: [],
     template: ``,
-    styles: ``,
+    styleUrls: ["./tile.base.scss"],
+
     host: {
-        "(click)": "focusActiveOption()",
+        "(click)": "handleClick()",
     },
 })
 export class TileBaseComponent {
+    private router: Router = inject(Router);
     public recipe: InputSignal<RecipeModel> = input.required<RecipeModel>();
     public hoverState: "normal" | "hover" = "normal";
-    public focusActiveOption(): void {
-        console.log(this.recipe().id);
+    public handleClick(): void {
+        this.router.navigate(["recipes", this.recipe().id]);
     }
 }

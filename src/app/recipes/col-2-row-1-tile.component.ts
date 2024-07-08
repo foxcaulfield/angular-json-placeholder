@@ -1,8 +1,4 @@
 import { Component } from "@angular/core";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatChipsModule } from "@angular/material/chips";
-import { MatRippleModule } from "@angular/material/core";
 import {
     trigger,
     state,
@@ -10,19 +6,13 @@ import {
     animate,
     transition,
 } from "@angular/animations";
-import { TileDetailsComponent } from "./tile-details.component";
 import { TileBaseComponent } from "./tile-base.component";
+import { TileBaseModule } from "./tile-base.module";
 
 @Component({
     selector: "app-2-1-tile",
     standalone: true,
-    imports: [
-        MatCardModule,
-        MatIconModule,
-        MatRippleModule,
-        MatChipsModule,
-        TileDetailsComponent,
-    ],
+    imports: [TileBaseModule],
     template: `
         <mat-card
             matRipple

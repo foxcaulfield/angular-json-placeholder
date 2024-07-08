@@ -1,4 +1,5 @@
-import { createFeature, createReducer } from "@ngrx/store";
+/* eslint-disable @typescript-eslint/explicit-function-return-type*/
+import { createFeature, createReducer, createSelector } from "@ngrx/store";
 import { recipesActions, recipesFeatureName } from "./recipes.actions";
 import { RecipeModel } from "./recipes.model";
 import { immerOn } from "ngrx-immer/store";
@@ -31,14 +32,30 @@ export const recipesFeature = createFeature({
             state.isLoading = false;
             state.error = null;
             state.itemsLoadedCount += action.recipes.length;
-            state.itemsTotalAvailable = action.total
-            state.items.push(...action.recipes)
+            state.itemsTotalAvailable = action.total;
+            state.items.push(...action.recipes);
         }),
         immerOn(recipesActions.loadFailure, (state, action) => {
             state.isLoading = false;
             state.error = action.error;
         })
-    )
+    ),
+    extraSelectors(baseSelectors) {
+        const selectById = (itemId: RecipeModel["id"]) => {
+            return createSelector(baseSelectors.selectItems, (items) =>
+                items.find((item) => item.id === itemId)
+            );
+        };
+
+        return { selectById };
+    },
 });
 
-export const {name,reducer, selectError, selectIsLoading, selectItems, selectItemsLoadedCount} = recipesFeature;
+export const {
+    name,
+    reducer,
+    selectError,
+    selectIsLoading,
+    selectItems,
+    selectItemsLoadedCount,
+} = recipesFeature;

@@ -1,7 +1,4 @@
 import { Component } from "@angular/core";
-import { MatCardModule } from "@angular/material/card";
-import { MatRippleModule } from "@angular/material/core";
-import { MatIconModule } from "@angular/material/icon";
 import {
     trigger,
     state,
@@ -10,11 +7,14 @@ import {
     transition,
 } from "@angular/animations";
 import { TileBaseComponent } from "./tile-base.component";
+import { TileBaseModule } from "./tile-base.module";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: "app-1-1-tile",
     standalone: true,
-    imports: [MatCardModule, MatRippleModule, MatIconModule],
+    imports: [TileBaseModule, MatButtonModule, MatIconModule],
     template: `
         <mat-card
             matRipple
@@ -25,9 +25,17 @@ import { TileBaseComponent } from "./tile-base.component";
             (mouseleave)="hoverState = 'normal'"
         >
             <mat-card-header>
-                <mat-icon>restaurant_menu</mat-icon>
+                <!-- <mat-icon>restaurant_menu</mat-icon> -->
                 <mat-card-title>{{ recipe().name }}</mat-card-title>
+                <button
+                    mat-mini-fab
+                    color="primary"
+                    matTooltip="Click to start cooking!"
+                >
+                    <mat-icon>restaurant_menu</mat-icon>
+                </button>
             </mat-card-header>
+
             <mat-card-content class="mat-card-content-basic">
                 <div class="picture child child-basic">
                     <img
@@ -44,6 +52,20 @@ import { TileBaseComponent } from "./tile-base.component";
         `
             mat-card-content {
                 flex-direction: column;
+            }
+
+            mat-card-header {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 15px;
+            }
+
+            mat-card-title {
+                height: 100%;
+                align-items: center;
+                justify-content: center;
+                display: flex;
             }
         `,
     ],

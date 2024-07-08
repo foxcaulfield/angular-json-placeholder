@@ -1,25 +1,35 @@
 import { Component, input, InputSignal } from "@angular/core";
 import { RecipeModel } from "./recipes.model";
 import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: "app-tile-details",
     standalone: true,
-    imports: [MatIconModule],
+    imports: [MatIconModule, MatButtonModule],
     template: `
         <div class="wrapper">
             <h5>
                 <strong>{{ recipe().name }}</strong>
             </h5>
             <p>
-                <mat-icon>access_time</mat-icon> {{ recipe().cookTimeMinutes }} mins
+                <mat-icon>access_time</mat-icon>
+                {{ recipe().cookTimeMinutes }} mins
             </p>
+            <p><mat-icon>fitness_center</mat-icon> {{ recipe().difficulty }}</p>
             <p>
-                <mat-icon>fitness_center</mat-icon> {{ recipe().difficulty }}
+                <mat-icon>star</mat-icon> {{ recipe().rating }} ({{
+                    recipe().reviewCount
+                }}
+                reviews)
             </p>
-            <p>
-                <mat-icon>star</mat-icon> {{ recipe().rating }} ({{ recipe().reviewCount }} reviews)
-            </p>
+            <button
+                mat-button
+                color="primary"
+                matTooltip="Click to start cooking!"
+            >
+                Cook Now
+            </button>
         </div>
     `,
     styles: [

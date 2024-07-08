@@ -1,30 +1,11 @@
 import { Component } from "@angular/core";
-import { MatCardModule } from "@angular/material/card";
-import { MatRippleModule } from "@angular/material/core";
-import { MatButtonModule } from "@angular/material/button";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatIconModule } from "@angular/material/icon";
-import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { TileDetailsComponent } from "./tile-details.component";
-import { JsonPipe } from "@angular/common";
-import { MatChipsModule } from "@angular/material/chips";
 import { TileBaseComponent } from "./tile-base.component";
+import { TileBaseModule } from "./tile-base.module";
 
 @Component({
     selector: "app-3-1-tile",
     standalone: true,
-
-    imports: [
-        MatCardModule,
-        MatRippleModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatIconModule,
-        MatProgressBarModule,
-        TileDetailsComponent,
-        JsonPipe,
-        MatChipsModule,
-    ],
+    imports: [TileBaseModule],
     template: `
         <mat-card matRipple class="card" appearance="outlined">
             <mat-card-content class="mat-card-content-basic">
@@ -59,15 +40,6 @@ import { TileBaseComponent } from "./tile-base.component";
                     </p>
                 </div>
             </mat-card-content>
-            <mat-card-actions>
-                <button
-                    mat-button
-                    color="primary"
-                    matTooltip="Click to start cooking!"
-                >
-                    Cook Now
-                </button>
-            </mat-card-actions>
         </mat-card>
     `,
     styleUrls: ["./tile.base.scss"],
