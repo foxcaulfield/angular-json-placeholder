@@ -11,133 +11,183 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
     selector: "app-single-recipe-page",
     standalone: true,
     imports: [TileBaseModule, MatProgressSpinner],
-    template: `<ng-container *ngIf="recipeItem$ | async as recipe">
-        <mat-card *ngIf="recipe; else loading">
-            <img mat-card-image [src]="recipe.image" alt="{{ recipe.name }}" />
-            <mat-card-title>{{ recipe.name }}</mat-card-title>
-            <mat-card-content>
-                <p class="description">{{ recipe.name }}</p>
-                <div class="info">
-                    <p>
-                        <mat-icon>schedule</mat-icon>
-                        <strong>Preparation Time:</strong>
-                        {{ recipe.prepTimeMinutes }} mins
-                    </p>
-                    <p>
-                        <mat-icon>schedule</mat-icon>
-                        <strong>Cook Time:</strong>
-                        {{ recipe.cookTimeMinutes }} mins
-                    </p>
-                    <p>
-                        <mat-icon>restaurant_menu</mat-icon>
-                        <strong>Servings:</strong> {{ recipe.servings }}
-                    </p>
-                    <p>
-                        <mat-icon>star</mat-icon> <strong>Rating:</strong>
-                        {{ recipe.rating }} ({{ recipe.reviewCount }} reviews)
-                    </p>
-                </div>
-                <div class="section">
-                    <h3>Ingredients:</h3>
-                    <ul>
-                        <li *ngFor="let ingredient of recipe.ingredients">
-                            {{ ingredient }}
-                        </li>
-                    </ul>
-                </div>
-                <div class="section">
-                    <h3>Instructions:</h3>
-                    <ol>
-                        <li *ngFor="let step of recipe.instructions">
-                            {{ step }}
-                        </li>
-                    </ol>
-                </div>
-                <div class="additional-info">
-                    <p><strong>Difficulty:</strong> {{ recipe.difficulty }}</p>
-                    <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
-                    <p>
-                        <strong>Calories per Serving:</strong>
-                        {{ recipe.caloriesPerServing }}
-                    </p>
-                    <p><strong>Tags:</strong> {{ recipe.tags.join(", ") }}</p>
-                </div>
-            </mat-card-content>
-            <mat-card-actions>
-                <button mat-raised-button color="primary" (click)="goBack()">
-                    Back
-                </button>
-            </mat-card-actions>
-        </mat-card>
-        <ng-template #loading>
-            <div class="loading">
-                <mat-spinner></mat-spinner>
-                <p>Loading...</p>
+    template: `
+        <div class="progress-bar-container">
+            @if (isLoading$ | async) {
+            <mat-progress-bar mode="query"></mat-progress-bar>
+            }
+        </div>
+        <div class="container">
+            <button mat-stroked-button color="primary" (click)="goBack()">
+                Back to Recipes
+            </button>
+            @if (recipeItem$ | async; as recipe) {
+            <mat-card>
+                <img
+                    mat-card-image
+                    [src]="recipe.image"
+                    alt="{{ recipe.name }}"
+                />
+                <mat-card-title>{{ recipe.name }}</mat-card-title>
+                <mat-card-content>
+                    <!-- <p class="description">{{ recipe.name }}</p> -->
+                    <p class="description"></p>
+                    <div class="info">
+                        <p>
+                            <mat-icon>schedule</mat-icon>
+                            <strong>Preparation Time:</strong>
+                            {{ recipe.prepTimeMinutes }} mins
+                        </p>
+                        <p>
+                            <mat-icon>schedule</mat-icon>
+                            <strong>Cook Time:</strong>
+                            {{ recipe.cookTimeMinutes }} mins
+                        </p>
+                        <p>
+                            <mat-icon>restaurant_menu</mat-icon>
+                            <strong>Servings:</strong> {{ recipe.servings }}
+                        </p>
+                        <p>
+                            <mat-icon>star</mat-icon> <strong>Rating:</strong>
+                            {{ recipe.rating }} ({{ recipe.reviewCount }}
+                            reviews)
+                        </p>
+                    </div>
+                    <div class="section">
+                        <h3>Ingredients:</h3>
+                        <ul>
+                            <li *ngFor="let ingredient of recipe.ingredients">
+                                {{ ingredient }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="section">
+                        <h3>Instructions:</h3>
+                        <ol>
+                            <li *ngFor="let step of recipe.instructions">
+                                {{ step }}
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="additional-info">
+                        <p>
+                            <strong>Difficulty:</strong> {{ recipe.difficulty }}
+                        </p>
+                        <p><strong>Cuisine:</strong> {{ recipe.cuisine }}</p>
+                        <p>
+                            <strong>Calories per Serving:</strong>
+                            {{ recipe.caloriesPerServing }}
+                        </p>
+                        <p>
+                            <strong>Tags:</strong> {{ recipe.tags.join(", ") }}
+                        </p>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="goBack()"
+                    >
+                        Back
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+            } @else {
+            <div class="no-recipe-container">
+                <mat-icon color="warn" class="no-recipe-icon">info</mat-icon>
+                <p class="no-recipe-message">No recipe with such ID.</p>
             </div>
-        </ng-template>
-    </ng-container> `,
+            }
+        </div>
+    `,
     styles: [
         `
-         mat-card {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-}
+            .progress-bar-container {
+                height: 4px; /* Adjust this to match the height of your progress bar */
+            }
 
-mat-card-content p,
-.mat-card-content ul,
-.mat-card-content ol {
-  margin: 10px 0;
-}
+            .container {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
 
-mat-card-content .description {
-  font-style: italic;
-  color: #555;
-}
+            mat-card {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                border: 1px solid #3c3c3c;
+                border-radius: 10px;
+            }
 
-mat-card-content .info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
+            mat-card-content p {
+                margin: 0;
+                font-size: 14px;
+            }
 
-mat-card-content .info p {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
+            .description {
+                font-style: italic;
+                color: #555;
+                height: 16px;
+            }
 
-mat-card-content .section {
-  margin-top: 20px;
-}
+            .info {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
 
-mat-card-content .section h3 {
-  margin-bottom: 10px;
-  font-weight: bold;
-}
+            .info p {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
 
-mat-card-content .additional-info {
-  margin-top: 20px;
-}
+            .section {
+                margin-top: 20px;
+            }
 
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+            .section h3 {
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
 
-.loading p {
-  margin-top: 10px;
-}
+            .additional-info {
+                margin-top: 20px;
+            }
 
-mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
+            .loading {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
 
+            .loading p {
+                margin-top: 10px;
+            }
+
+            mat-card-actions {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 20px;
+            }
+
+            .no-recipe-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                padding: 16px;
+                text-align: center;
+            }
+
+            .no-recipe-message {
+                font-size: 18px;
+                color: #757575; /* Grey color */
+            }
         `,
     ],
 })
@@ -149,11 +199,14 @@ export class SingleRecipePageComponent implements OnInit {
     public recipeItem$: Observable<RecipeModel | undefined> = new Observable<
         RecipeModel | undefined
     >();
+    public isLoading$: Observable<boolean> = this.store.select(
+        recipesFeature.selectIsLoading
+    );
 
     public ngOnInit(): void {
         this.route.paramMap.subscribe((params) => {
             const id = parseInt(params.get("id") || "", 10);
-            // TODO Check post is exist in store
+            // TODO Check recipe is exist in store
             if (isNaN(id) && id) {
                 this.router.navigate(["error"]);
             } else {
@@ -161,24 +214,13 @@ export class SingleRecipePageComponent implements OnInit {
                 this.recipeItem$ = this.store.select(
                     recipesFeature.selectById(id)
                 );
-                // this.store.dispatch(postsActions.getComments({ id }));
+                // this.store.dispatch(recipesActions.getComments({ id }));
 
-                this.recipeItem$.subscribe((post) => {
-                    if (!post) {
-                        // TODO add single post loading
-                        this.router.navigate(["posts"]);
-                    } else {
-                        // this.comments$ = this.store.select(
-                        //     postsFeature.selectCommentsById(post.id)
-                        // );
-                        // this.comments$.subscribe((comments) => {
-                        //     if (!comments) {
-                        //         this.store.dispatch(
-                        //             postsActions.getComments({ id })
-                        //         );
-                        //     }
-                        // });
-                    }
+                this.recipeItem$.subscribe((recipe) => {
+                    if (!recipe) {
+                        // TODO add single recipe loading
+                        // this.router.navigate(["recipes"]);
+                    } 
                 });
             }
         });
