@@ -28,6 +28,7 @@ import { MatButtonModule } from "@angular/material/button";
                 <!-- <mat-icon>restaurant_menu</mat-icon> -->
                 <mat-card-title>{{ recipe().name }}</mat-card-title>
                 <button
+                    class="cook-now-button"
                     mat-mini-fab
                     color="primary"
                     matTooltip="Click to start cooking!"
@@ -67,6 +68,13 @@ import { MatButtonModule } from "@angular/material/button";
                 justify-content: center;
                 display: flex;
             }
+
+            .cook-now-button {
+    position: absolute;
+    left: 2%;
+    bottom: 2%;
+    z-index: 100; 
+            }   
         `,
     ],
     animations: [

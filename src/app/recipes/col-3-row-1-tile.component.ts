@@ -15,6 +15,14 @@ import { TileBaseModule } from "./tile-base.module";
                         [src]="recipe().image"
                         alt="{{ recipe().name }}"
                     />
+                    <button
+                    class="cook-now-button"
+                    mat-mini-fab
+                    color="primary"
+                    matTooltip="Click to start cooking!"
+                >
+                    <mat-icon>restaurant_menu</mat-icon>
+                </button>
                 </div>
                 <div class="details child child-basic">
                     <app-tile-details [recipe]="recipe()" />
@@ -52,6 +60,12 @@ import { TileBaseModule } from "./tile-base.module";
 
             mat-card-content {
                 flex-direction: row;
+            }
+            .cook-now-button {
+                position: sticky;
+                left: 2%;
+                bottom: 2%;
+                z-index: 100;   
             }
         `,
     ],
