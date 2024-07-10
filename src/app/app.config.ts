@@ -10,18 +10,24 @@ import { postsEffects } from "./posts/posts.effects";
 import { provideHttpClient } from "@angular/common/http";
 import { recipesFeature } from "./recipes/recipes.reducer";
 import { recipesEffects } from "./recipes/recipes.effects";
+import { authFeature } from "./auth/auth.reducer";
+import { AuthEffects } from "./auth/auth.effects";
+
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideHttpClient(),
+        provideHttpClient(/* withInterceptors([authInterceptor])*/),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
         provideAnimationsAsync(),
         provideStore({
             postsFeature: postsFeature.reducer,
             recipesFeature: recipesFeature.reducer,
+            authFeature: authFeature.reducer,
         }),
-        provideEffects(postsEffects, recipesEffects),
+        provideEffects(postsEffects, recipesEffects, AuthEffects
+
+        ),
         provideStoreDevtools({
             maxAge: 25, // Retains last 25 states
             logOnly: false, // Restrict extension to log-only mode

@@ -1,6 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { NavbarComponent } from "./common/navbar.component";
+import { Store } from "@ngrx/store";
+import { authActions } from "./auth/auth.actions";
 
 @Component({
     selector: "app-root",
@@ -24,6 +26,11 @@ import { NavbarComponent } from "./common/navbar.component";
 }
     `,
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+    private readonly store: Store = inject(Store);
     public title: string = "angular-json-placeholder";
+
+    public ngOnInit(): void {
+        this.store.dispatch(authActions.authOnInit());
+    }
 }

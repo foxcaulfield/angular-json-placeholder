@@ -4,6 +4,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { NavbarItemComponent } from "./navbar-item.component";
+import { AuthNavbarItemComponent } from "../auth/auth-navbar-item.component";
 
 @Component({
     selector: "app-navbar",
@@ -15,6 +16,7 @@ import { NavbarItemComponent } from "./navbar-item.component";
         RouterLink,
         RouterLinkActive,
         NavbarItemComponent,
+        AuthNavbarItemComponent
     ],
     template: `
         <mat-toolbar class="toolbar">
@@ -33,6 +35,7 @@ import { NavbarItemComponent } from "./navbar-item.component";
                 [nameValue]="item.name"
             ></app-navbar-item>
             }
+            <app-auth-navbar-item></app-auth-navbar-item>
         </mat-toolbar>
     `,
     styles: `
@@ -45,12 +48,16 @@ import { NavbarItemComponent } from "./navbar-item.component";
             width: 100%;
             z-index: 1000;
         }
+        .mat-accent {
+                background: rgba(255, 255, 255, 0.2);
+            }
   `,
 })
 export class NavbarComponent {
+
     public items: Array<{ link: string; name: string }> = [
         { link: "/posts", name: "Posts" },
         { link: "/recipes", name: "Recipes" },
-        { link: "/users", name: "Users" },
+        // { link: "/users", name: "Users" },
     ];
 }
